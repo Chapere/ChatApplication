@@ -36,9 +36,7 @@ import javafx.stage.Stage;
 
 /**
  * Benutzeroberflaeche zum Starten des Chat-Servers
- * 
  * @author Paul Mandl
- *
  */
 public class ChatServerGUI extends Application implements ChatServerGuiInterface {
 
