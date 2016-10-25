@@ -22,9 +22,7 @@ import javafx.stage.WindowEvent;
 
 /**
  * Chat-GUI
- * 
  * @author Paul Mandl
- *
  */
 public class ClientFxGUI extends Application implements ClientUserInterface {
 
@@ -44,18 +42,16 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	/**
 	 * Kommunikationsschnittstelle zur Kommunikation mit dem Chat-Server
 	 * aktivieren
-	 * 
 	 * @param String
-	 *          serverType Servertyp
+	 * serverType Servertyp
 	 * @param port
-	 *          Serverport
+	 * Serverport
 	 * @param host
-	 *          Hostname oder IP-Adresse des Servers
+	 * Hostname oder IP-Adresse des Servers
 	 * @return Referenz auf Kommunikationsobjekt
 	 */
 	public ClientImpl createCommunicator(String serverType, int port, String host) {
-
-		communicator = new ClientImpl(this, port, host, serverType);
+        communicator = new ClientImpl(this, port, host, serverType);
 		return communicator;
 	}
 
