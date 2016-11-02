@@ -11,7 +11,6 @@ import edu.hm.dako.chat.connection.Connection;
  * Abstrakte Klasse mit Basisfunktionalitaet fuer clientseitige Message-Processing-Threads
  * 
  * @author Peter Mandl
- *
  */
 public abstract class AbstractMessageListenerThread extends Thread {
 
@@ -40,9 +39,7 @@ public abstract class AbstractMessageListenerThread extends Thread {
 
   /**
    * Event vom Server zur Veraenderung der UserListe (eingeloggte Clients) verarbeiten
-   * 
-   * @param receivedPdu
-   *          Empfangene PDU
+   * @param receivedPdu Empfangene PDU
    */
   protected void handleUserListEvent(ChatPDU receivedPdu) {
 

@@ -25,9 +25,7 @@ import javafx.stage.WindowEvent;
  * @author Paul Mandl
  */
 public class ClientFxGUI extends Application implements ClientUserInterface {
-
 	private static Log log = LogFactory.getLog(ClientFxGUI.class);
-
 	private Stage stage;
 	private static LogInGuiController lc;
 	private static LoggedInGuiController lc2;
@@ -42,12 +40,9 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	/**
 	 * Kommunikationsschnittstelle zur Kommunikation mit dem Chat-Server
 	 * aktivieren
-	 * @param String
-	 * serverType Servertyp
-	 * @param port
-	 * Serverport
-	 * @param host
-	 * Hostname oder IP-Adresse des Servers
+	 * @param String serverType Servertyp
+	 * @param port Serverport
+	 * @param host Hostname oder IP-Adresse des Servers
 	 * @return Referenz auf Kommunikationsobjekt
 	 */
 	public ClientImpl createCommunicator(String serverType, int port, String host) {
