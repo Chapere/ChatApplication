@@ -5,16 +5,20 @@ import edu.hm.dako.chat.common.SystemConstants;
 
 /**
  * Verwaltet eine Verbindung zum Server.
- *
  * @author Mandl
  */
 public class ClientImpl extends AbstractChatClient {
+
 	/**
 	 * Konstruktor
-	 * @param userInterface Schnittstelle zum User-Interface
-	 * @param serverPort Portnummer des Servers
-	 * @param remoteServerAddress IP-Adresse/Hostname des Servers
+	 * @param userInterface
+	 *          Schnittstelle zum User-Interface
+	 * @param serverPort
+	 *          Portnummer des Servers
+	 * @param remoteServerAddress
+	 *          IP-Adresse/Hostname des Servers
 	 */
+
 	public ClientImpl(ClientUserInterface userInterface, int serverPort,
 			String remoteServerAddress, String serverType) {
 
@@ -26,6 +30,7 @@ public class ClientImpl extends AbstractChatClient {
 		threadName = Thread.currentThread().getName();
 
 		try {
+
 			if (serverType.equals(SystemConstants.IMPL_TCP_ADVANCED)) {
 				// TODO Advanced TCP Server erzeugen
 

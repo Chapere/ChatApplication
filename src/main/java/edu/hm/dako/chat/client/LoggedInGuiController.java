@@ -16,7 +16,6 @@ import javafx.scene.input.KeyEvent;
 
 /**
  * Controller fuer Chat-GUI
- * 
  * @author Paul Mandl
  */
 public class LoggedInGuiController {

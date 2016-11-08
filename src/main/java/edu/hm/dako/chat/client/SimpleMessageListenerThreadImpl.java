@@ -2,7 +2,6 @@ package edu.hm.dako.chat.client;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import edu.hm.dako.chat.common.ChatPDU;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ExceptionHandler;
@@ -10,9 +9,7 @@ import edu.hm.dako.chat.connection.Connection;
 
 /**
  * Thread wartet auf ankommende Nachrichten vom Server und bearbeitet diese.
- * 
  * @author Peter Mandl
- *
  */
 public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThread {
 

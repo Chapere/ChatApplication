@@ -11,7 +11,6 @@ import edu.hm.dako.chat.server.ServerStartData;
 
 /**
  * Diese Klasse simuliert eine Benutzeroberflaeche.
- *
  * @author mandl
  */
 

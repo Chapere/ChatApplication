@@ -9,7 +9,6 @@ import edu.hm.dako.chat.connection.Connection;
 
 /**
  * Abstrakte Klasse mit Basisfunktionalitaet fuer clientseitige Message-Processing-Threads
- * 
  * @author Peter Mandl
  */
 public abstract class AbstractMessageListenerThread extends Thread {
