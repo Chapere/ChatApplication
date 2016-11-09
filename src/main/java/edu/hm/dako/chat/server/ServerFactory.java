@@ -59,7 +59,7 @@ public final class ServerFactory {
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
-				return new AdvancedChatServerImpl(Executors.newCachedThreadPool();
+				return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
 					getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
 			} catch (Exception e) {
 				throw new Exception(e);

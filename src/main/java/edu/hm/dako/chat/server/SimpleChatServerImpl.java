@@ -14,9 +14,7 @@ import edu.hm.dako.chat.connection.ServerSocketInterface;
 import javafx.concurrent.Task;
 
 /**
- * <p/>
  * Simple-Chat-Server-Implementierung
- *
  * @author Peter Mandl
  */
 public class SimpleChatServerImpl extends AbstractChatServer {
@@ -32,7 +30,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 
 	/**
 	 * Konstruktor
-	 * 
+	 *
 	 * @param executorService
 	 * @param socket
 	 * @param serverGuiInterface

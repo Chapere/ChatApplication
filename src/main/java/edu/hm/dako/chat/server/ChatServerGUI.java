@@ -41,16 +41,13 @@ import javafx.stage.Stage;
 public class ChatServerGUI extends Application implements ChatServerGuiInterface {
 
 	private static Log log = LogFactory.getLog(ChatServerGUI.class);
-
 	// Standard-Port des Servers
 	static final String DEFAULT_SERVER_PORT = "50000";
-
 	// Standard-und Maximal-Puffergroessen in Byte
 	static final String DEFAULT_SENDBUFFER_SIZE = "300000";
 	static final String DEFAULT_RECEIVEBUFFER_SIZE = "300000";
 	static final String MAX_SENDBUFFER_SIZE = "500000";
 	static final String MAX_RECEIVEBUFFER_SIZE = "500000";
-
 	final VBox pane = new VBox(5);
 
 	// Interface der Chat-Server-Implementierung
@@ -73,7 +70,6 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 	private ComboBox<String> comboBoxImplType;
 
 	// Testfelder, Buttons und Labels der ServerGUI
-
 	private TextField startTimeField;
 	private TextField receivedRequests;
 	private TextField loggedInClients;
@@ -83,7 +79,6 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 	private Label serverPortLabel;
 	private Label sendBufferSizeLabel;
 	private Label receiveBufferSizeLabel;
-
 	private Button startButton;
 	private Button stopButton;
 	private Button finishButton;
@@ -108,9 +103,9 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 		startTimeField = createNotEditableTextfield("");
 		receivedRequests = createNotEditableTextfield("");
 		loggedInClients = createNotEditableTextfield("");
-
 	}
 
+	//MainMethode
 	public static void main(String[] args) {
 		PropertyConfigurator.configureAndWatch("log4j.server.properties", 60 * 1000);
 		launch(args);
@@ -118,23 +113,17 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	@Override
 	public void start(final Stage stage) throws Exception {
-
 		stage.setTitle("ChatServerGUI");
 		stage.setScene(new Scene(pane, 335, 350));
 		stage.show();
-
 		pane.setStyle("-fx-background-color: cornsilk");
 		pane.setPadding(new Insets(10, 10, 10, 10));
-
 		pane.getChildren().add(createSeperator("Eingabe", 265));
 		pane.getChildren().add(createInputPane());
-
 		pane.getChildren().add(createSeperator("Informationen", 235));
 		pane.getChildren().add(createInfoPane());
-
 		pane.getChildren().add(createSeperator("", 310));
 		pane.getChildren().add(createButtonPane());
-
 		reactOnStartButton();
 		reactOnStopButton();
 		reactOnFinishButton();
@@ -143,28 +132,22 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	/**
 	 * Eingabe-Pane erzeugen
-	 * 
 	 * @return pane
 	 */
 	private GridPane createInputPane() {
 		final GridPane inputPane = new GridPane();
-
 		final Label label = new Label("Serverauswahl");
 		label.setMinSize(100, 25);
 		label.setMaxSize(100, 25);
-
 		serverPortLabel = createLabel("ServerPort");
 		sendBufferSizeLabel = createLabel("Sendepuffer in Byte");
 		receiveBufferSizeLabel = createLabel("Empfangspuffer in Byte");
-
 		inputPane.setPadding(new Insets(5, 5, 5, 5));
 		inputPane.setVgap(1);
-
 		comboBoxImplType = createComboBox(implTypeOptions);
 		serverPort = createEditableTextfield(DEFAULT_SERVER_PORT);
 		sendBufferSize = createEditableTextfield(DEFAULT_SENDBUFFER_SIZE);
 		receiveBufferSize = createEditableTextfield(DEFAULT_RECEIVEBUFFER_SIZE);
-
 		inputPane.add(label, 1, 3);
 		inputPane.add(comboBoxImplType, 3, 3);
 		inputPane.add(serverPortLabel, 1, 5);
@@ -173,26 +156,21 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 		inputPane.add(sendBufferSize, 3, 7);
 		inputPane.add(receiveBufferSizeLabel, 1, 9);
 		inputPane.add(receiveBufferSize, 3, 9);
-
 		return inputPane;
 	}
 
 	/**
 	 * Info-Pain erzeugen
-	 * 
 	 * @return pane
 	 */
 	private GridPane createInfoPane() {
 		final GridPane infoPane = new GridPane();
 		infoPane.setPadding(new Insets(5, 5, 5, 5));
 		infoPane.setVgap(1);
-
 		infoPane.add(createLabel("Startzeit"), 1, 3);
 		infoPane.add(startTimeField, 3, 3);
-
 		infoPane.add(createLabel("Empfangene Requests"), 1, 5);
 		infoPane.add(receivedRequests, 3, 5);
-
 		infoPane.add(createLabel("Angemeldete Clients"), 1, 7);
 		infoPane.add(loggedInClients, 3, 7);
 		return infoPane;
@@ -200,16 +178,13 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	/**
 	 * Pane fuer Buttons erzeugen
-	 * 
 	 * @return HBox
 	 */
 	private HBox createButtonPane() {
 		final HBox buttonPane = new HBox(5);
-
 		startButton = new Button("Server starten");
 		stopButton = new Button("Server stoppen");
 		finishButton = new Button("Beenden");
-
 		buttonPane.getChildren().addAll(startButton, stopButton, finishButton);
 		buttonPane.setAlignment(Pos.CENTER);
 		return buttonPane;
@@ -217,7 +192,6 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	/**
 	 * Label erzeugen
-	 * 
 	 * @param value
 	 * @return Label
 	 */
@@ -230,9 +204,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	/**
 	 * Aufbau der Combobox fuer die Serverauswahl in der GUI
-	 * 
-	 * @param options
-	 *          Optionen fuer Implementierungstyp
+	 * @param options Optionen fuer Implementierungstyp
 	 * @return Combobox
 	 */
 	private ComboBox<String> createComboBox(ObservableList<String> options) {
@@ -247,11 +219,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	/**
 	 * Trennlinie erstellen
-	 * 
-	 * @param value
-	 *          Text der Trennlinie
-	 * @param size
-	 *          Groesse der Trennlinie
+	 * @param value Text der Trennlinie
+	 * @param size Groesse der Trennlinie
 	 * @return Trennlinie
 	 */
 	private HBox createSeperator(String value, int size) {
@@ -259,24 +228,18 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 		final HBox labeledSeparator = new HBox();
 		final Separator rightSeparator = new Separator(Orientation.HORIZONTAL);
 		final Label textOnSeparator = new Label(value);
-
 		textOnSeparator.setFont(Font.font(12));
-
 		rightSeparator.setMinWidth(size);
 		rightSeparator.setMaxWidth(size);
-
 		labeledSeparator.getChildren().add(textOnSeparator);
 		labeledSeparator.getChildren().add(rightSeparator);
 		labeledSeparator.setAlignment(Pos.BASELINE_LEFT);
-
 		return labeledSeparator;
 	}
 
 	/**
 	 * Nicht editierbares Feld erzeugen
-	 * 
-	 * @param value
-	 *          Feldinhalt
+	 * @param value Feldinhalt
 	 * @return Textfeld
 	 */
 	private TextField createNotEditableTextfield(String value) {
@@ -291,9 +254,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	/**
 	 * Erstellung editierbarer Textfelder
-	 * 
-	 * @param value
-	 *          Feldinhalt
+	 * @param value Feldinhalt
 	 * @return textField
 	 */
 	private TextField createEditableTextfield(String value) {
@@ -320,7 +281,6 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 				int serverPort = readServerPort();
 				int sendBufferSize = readSendBufferSize();
 				int receiveBufferSize = readReceiveBufferSize();
-
 				receivedRequests.setText("0");
 				loggedInClients.setText("0");
 
