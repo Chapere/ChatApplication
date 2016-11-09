@@ -1,10 +1,8 @@
 package edu.hm.dako.chat.server;
 
 import java.util.Vector;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import edu.hm.dako.chat.common.ChatPDU;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ClientListEntry;
@@ -16,9 +14,7 @@ import edu.hm.dako.chat.connection.EndOfFileException;
 /**
  * Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client.
  * Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
- * 
  * @author Mandl
- *
  */
 public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 

@@ -11,13 +11,11 @@ import java.util.concurrent.atomic.AtomicLong;
  * @author Mandl
  */
 
+import edu.hm.dako.chat.client.*;
+import edu.hm.dako.chat.server.AdvancedChatWorkerThreadImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.hm.dako.chat.client.AbstractChatClient;
-import edu.hm.dako.chat.client.ClientImpl;
-import edu.hm.dako.chat.client.ClientUserInterface;
-import edu.hm.dako.chat.client.SimpleMessageListenerThreadImpl;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.common.ImplementationType;
@@ -128,9 +126,10 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 		case TCPAdvancedImplementation:
 			try {
-
 				// TODO AdvancedMessageListenerThreadImpl erzeugen und starten
-
+				messageListenerThread = new AdvancedMessageListenerThreadImpl(this, connection,
+						sharedClientData);
+				messageListenerThread.start();
 			} catch (Exception e) {
 				ExceptionHandler.logException(e);
 			}
