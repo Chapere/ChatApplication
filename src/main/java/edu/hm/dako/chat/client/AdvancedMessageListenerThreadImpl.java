@@ -9,7 +9,7 @@ import edu.hm.dako.chat.connection.Connection;
 
 /**
  * Thread wartet auf ankommende Nachrichten vom Server und bearbeitet diese.
- * @author Taha Obed
+ * @author Gruppe Noone
  */
 public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerThread {
 
@@ -23,7 +23,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
     @Override
     protected void loginResponseAction(ChatPDU receivedPdu) {
-
         if(receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
 
             // Login hat nicht funktioniert
@@ -39,6 +38,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             try {
                 connection.close();
             } catch (Exception e) {
+                //TODO Hier muss weiter ausgeführt werden!
             }
 
         } else {
@@ -149,7 +149,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
         ChatPDU receivedPdu = null;
 
-        log.debug("SimpleMessageListenerThread gestartet");
+        log.debug("AdvancedMessageListenerThread gestartet");
 
         while (!finished) {
 
@@ -203,11 +203,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                         break;
 
                     case REGISTERED:
-
                         switch (receivedPdu.getPduType()) {
-
                             case CHAT_MESSAGE_RESPONSE:
-
                                 // Die eigene zuletzt gesendete Chat-Nachricht wird vom
                                 // Server bestaetigt.
                                 chatMessageResponseAction(receivedPdu);
@@ -222,14 +219,12 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User erweitert hat
                                 loginEventAction(receivedPdu);
-
                                 break;
 
                             case LOGOUT_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User veraendert hat
                                 logoutEventAction(receivedPdu);
-
                                 break;
 
                             default:
@@ -239,9 +234,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                         break;
 
                     case UNREGISTERING:
-
                         switch (receivedPdu.getPduType()) {
-
                             case CHAT_MESSAGE_EVENT:
                                 // Chat-Nachricht vom Server gesendet
                                 chatMessageEventAction(receivedPdu);
@@ -276,7 +269,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                     case UNREGISTERED:
                         log.debug(
                                 "Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
-
                         break;
 
                     default:
@@ -294,7 +286,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         log.debug("Ordnungsgemaesses Ende des SimpleMessageListener-Threads fuer User"
                 + sharedClientData.userName + ", Status: " + sharedClientData.status);
     } // run
-
 }
 
 

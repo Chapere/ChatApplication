@@ -25,6 +25,7 @@ import javafx.stage.WindowEvent;
  * @author Paul Mandl
  */
 public class ClientFxGUI extends Application implements ClientUserInterface {
+
 	private static Log log = LogFactory.getLog(ClientFxGUI.class);
 	private Stage stage;
 	private static LogInGuiController lc;
@@ -159,10 +160,12 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void abortTest() {
+        //TODO Methode ausführen
 	}
 
 	@Override
 	public void releaseTest() {
+        //TODO Methode ausführen
 	}
 
 	@Override
@@ -183,7 +186,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	public void setSessionStatisticsCounter(long numberOfSentEvents,
 			long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
 			long numberOfReceivedChatMessages) {
-
+        //TODO Methode ausführen
 	}
 
 	@Override
@@ -234,6 +237,6 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void logoutComplete() {
-		log.debug("Abnmeldung durchgefuehrt");
+		log.debug("Abmeldung durchgefuehrt");
 	}
 }

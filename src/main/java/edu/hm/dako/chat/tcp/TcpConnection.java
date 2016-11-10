@@ -16,9 +16,7 @@ import edu.hm.dako.chat.connection.EndOfFileException;
 
 /**
  * Implementierung der TCP-Verbindung
- * 
  * @author Peter Mandl
- *
  */
 public class TcpConnection implements Connection {
 
