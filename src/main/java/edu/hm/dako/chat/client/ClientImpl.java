@@ -27,8 +27,10 @@ public class ClientImpl extends AbstractChatClient {
 
 		try {
 			if (serverType.equals(SystemConstants.IMPL_TCP_ADVANCED)) {
-				//TODO Advanced TCP Server erzeugen
-
+				//TODO Advanced TCP Server erzeugen (erledigt)
+				// Advanced TCP Server erzeugen
+				messageListenerThread = new AdvancedMessageListenerThreadImpl(userInterface,
+						connection, sharedClientData);
 			} else {
 				// Simple TCP Server erzeugen
 				messageListenerThread = new SimpleMessageListenerThreadImpl(userInterface,

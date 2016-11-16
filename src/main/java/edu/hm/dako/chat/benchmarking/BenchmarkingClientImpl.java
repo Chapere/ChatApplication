@@ -125,9 +125,9 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 		case TCPAdvancedImplementation:
 			try {
 				// TODO AdvancedMessageListenerThreadImpl erzeugen und starten
-				/*messageListenerThread = new AdvancedMessageListenerThreadImpl(this, connection,
+				messageListenerThread = new AdvancedMessageListenerThreadImpl(this, connection,
 						sharedClientData);
-				messageListenerThread.start();*/
+				messageListenerThread.start();
 			} catch (Exception e) {
 				ExceptionHandler.logException(e);
 			}
