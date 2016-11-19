@@ -52,7 +52,8 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
     }
 
     /**
-     *
+     * Die Start-Methode wird zum starten des Servers begonnen
+     * throws Exception
      */
     @Override
     public void start() {
@@ -61,7 +62,6 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
             protected Void call() throws Exception {
                 // Clientliste erzeugen
                 clients = SharedChatClientList.getInstance();
-
                 while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
                     try {
                         // Auf ankommende Verbindungsaufbauwuensche warten
@@ -94,7 +94,7 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
     }
 
     /**
-     *
+     * Die Stop-Methode wird zum schliessen des Servers genutzt
      * @throws Exception
      */
     @Override
@@ -122,7 +122,6 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
         log.debug("Listen-Socket geschlossen");
         executorService.shutdown();
         log.debug("Threadpool freigegeben");
-
         System.out.println("AdvancedChatServer beendet sich");
     }
 }

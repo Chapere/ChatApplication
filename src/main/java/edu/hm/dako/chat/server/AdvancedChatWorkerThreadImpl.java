@@ -18,15 +18,26 @@ import org.jgroups.demos.Chat;
  * @author NONAME
  */
 public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
-
+    /**
+     *
+     */
     private static Log log = LogFactory.getLog(AdvancedChatWorkerThreadImpl.class);
-
+    /**
+     *
+     * @param con
+     * @param clients
+     * @param counter
+     * @param serverGuiInterface
+     */
     public AdvancedChatWorkerThreadImpl(Connection con, SharedChatClientList clients,
                                         SharedServerCounter counter, ChatServerGuiInterface
                                         serverGuiInterface) {
         super(con, clients, counter, serverGuiInterface);
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         log.debug(
@@ -45,6 +56,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         closeConnection();
     }
 
+    /**
+     *
+     * @param pdu Zu sendende PDU
+     */
     @Override
     protected void sendLoginListUpdateEvent(ChatPDU pdu) {
 
@@ -80,6 +95,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         }
     }
 
+    /**
+     *
+     * @param receivedPdu Empfangene PDU
+     */
     @Override
     protected void loginRequestAction(ChatPDU receivedPdu) {
 
@@ -140,6 +159,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         }
     }
 
+    /**
+     *
+     * @param receivedPdu Empfangene PDU
+     */
     @Override
     protected void logoutRequestAction(ChatPDU receivedPdu) {
 
@@ -174,6 +197,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         }
     }
 
+    /**
+     *
+     * @param receivedPdu Empfangene PDU
+     */
     @Override
     protected void chatMessageRequestAction(ChatPDU receivedPdu) {
 
@@ -340,6 +367,10 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         return false;
     }
 
+    /**
+     *
+     * @throws Exception
+     */
     @Override
     protected void handleIncomingMessage() throws Exception {
         if (checkIfClientIsDeletable() == true) {

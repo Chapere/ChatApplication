@@ -2,10 +2,10 @@ package edu.hm.dako.chat.common;
 
 /**
  * Enumeration zur Definition der Chat-PDU-Typen
- *
  * @author Matthias Strobl, P. Mandl
  */
 public enum PduType {
+
     UNDEFINED(0, "Undefined"),
     LOGIN_REQUEST(1, "Login-Request"),
     LOGIN_RESPONSE(2, "Login-Response"),
@@ -24,29 +24,29 @@ public enum PduType {
     private final String description;
 
     PduType(int id, String description) {
-	this.id = id;
-	this.description = description;
+	    this.id = id;
+	    this.description = description;
     }
 
     public static PduType getId(int id) {
-	for (PduType e : values()) {
-	    if (e.getId() == id) {
-		return e;
+	    for (PduType e : values()) {
+	        if (e.getId() == id) {
+		    return e;
+	        }
 	    }
-	}
 	return null;
     }
 
     public int getId() {
-	return id;
+	    return id;
     }
 
     public String getDescription() {
-	return description;
+	    return description;
     }
 
     @Override
     public String toString() {
-	return description;
+	    return description;
     }
 }

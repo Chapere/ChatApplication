@@ -146,13 +146,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
      * Bearbeitung aller vom Server ankommenden Nachrichten
      */
     public void run() {
-
         ChatPDU receivedPdu = null;
-
         log.debug("AdvancedMessageListenerThread gestartet");
 
         while (!finished) {
-
             try {
                 // Naechste ankommende Nachricht empfangen
                 log.debug("Auf die naechste Nachricht vom Server warten");
@@ -164,38 +161,28 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             }
 
             if (receivedPdu != null) {
-
                 switch (sharedClientData.status) {
-
                     case REGISTERING:
-
                         switch (receivedPdu.getPduType()) {
 
                             case LOGIN_RESPONSE:
                                 // Login-Bestaetigung vom Server angekommen
                                 loginResponseAction(receivedPdu);
-
                                 break;
-
                             case LOGIN_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User erweitert hat
                                 loginEventAction(receivedPdu);
-
                                 break;
-
                             case LOGOUT_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User veraendert hat
                                 logoutEventAction(receivedPdu);
-
                                 break;
-
                             case CHAT_MESSAGE_EVENT:
                                 // Chat-Nachricht vom Server gesendet
                                 chatMessageEventAction(receivedPdu);
                                 break;
-
                             default:
                                 log.debug("Ankommende PDU im Zustand " + sharedClientData.status
                                         + " wird verworfen");
@@ -209,24 +196,20 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                                 // Server bestaetigt.
                                 chatMessageResponseAction(receivedPdu);
                                 break;
-
                             case CHAT_MESSAGE_EVENT:
                                 // Chat-Nachricht vom Server gesendet
                                 chatMessageEventAction(receivedPdu);
                                 break;
-
                             case LOGIN_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User erweitert hat
                                 loginEventAction(receivedPdu);
                                 break;
-
                             case LOGOUT_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User veraendert hat
                                 logoutEventAction(receivedPdu);
                                 break;
-
                             default:
                                 log.debug("Ankommende PDU im Zustand " + sharedClientData.status
                                         + " wird verworfen");
@@ -239,33 +222,26 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                                 // Chat-Nachricht vom Server gesendet
                                 chatMessageEventAction(receivedPdu);
                                 break;
-
                             case LOGOUT_RESPONSE:
                                 // Bestaetigung des eigenen Logout
                                 logoutResponseAction(receivedPdu);
                                 break;
-
                             case LOGIN_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User erweitert hat
                                 loginEventAction(receivedPdu);
-
                                 break;
-
                             case LOGOUT_EVENT:
                                 // Meldung vom Server, dass sich die Liste der
                                 // angemeldeten User veraendert hat
                                 logoutEventAction(receivedPdu);
-
                                 break;
-
                             default:
                                 log.debug("Ankommende PDU im Zustand " + sharedClientData.status
                                         + " wird verworfen");
                                 break;
                         }
                         break;
-
                     case UNREGISTERED:
                         log.debug(
                                 "Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
