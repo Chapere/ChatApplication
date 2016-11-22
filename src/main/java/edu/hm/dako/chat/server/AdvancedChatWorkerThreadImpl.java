@@ -19,15 +19,15 @@ import org.jgroups.demos.Chat;
  */
 public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
     /**
-     *
+     * Die advanced-logdatei
      */
     private static Log log = LogFactory.getLog(AdvancedChatWorkerThreadImpl.class);
     /**
      *
-     * @param con
-     * @param clients
-     * @param counter
-     * @param serverGuiInterface
+     * @param con die Connetion
+     * @param clients die zum Server verbundenden Clients
+     * @param counter Der Client-zähler
+     * @param serverGuiInterface Das Serverinterface
      */
     public AdvancedChatWorkerThreadImpl(Connection con, SharedChatClientList clients,
                                         SharedServerCounter counter, ChatServerGuiInterface
@@ -36,7 +36,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
     }
 
     /**
-     *
+     * die run-Methode
      */
     @Override
     public void run() {
@@ -44,8 +44,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                 "ChatWorker-Thread erzeugt, Threadname: " + Thread.currentThread().getName());
         while (!finished && !Thread.currentThread().isInterrupted()) {
             try {
-                // Warte auf naechste Nachricht des Clients und fuehre
-                // entsprechende Aktion aus
+                // Warte auf nächste Nachricht des Clients und fuehre entsprechende Aktion aus
                 handleIncomingMessage();
             } catch (Exception e) {
                 log.error("Exception waehrend der Nachrichtenverarbeitung");

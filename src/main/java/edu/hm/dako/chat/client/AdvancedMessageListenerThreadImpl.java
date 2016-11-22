@@ -21,6 +21,8 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         super(userInterface, con, sharedData);
     }
 
+    //alte Methoden der Simple-Chat Lösung
+
     @Override
     protected void loginResponseAction(ChatPDU receivedPdu) {
         if(receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
@@ -136,8 +138,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         // Eventzaehler fuer Testzwecke erhoehen
         sharedClientData.eventCounter.getAndIncrement();
 
-        // Empfangene Chat-Nachricht an User Interface zur
-        // Darstellung uebergeben
+        // Empfangene Chat-Nachricht an User Interface zur Darstellung uebergeben
         userInterface.setMessageLine(receivedPdu.getEventUserName(),
                 (String) receivedPdu.getMessage());
     }

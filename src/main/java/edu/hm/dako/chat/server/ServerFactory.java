@@ -44,7 +44,6 @@ public final class ServerFactory {
 		switch (implType) {
 
 		case TCPSimpleImplementation:
-
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
@@ -55,7 +54,7 @@ public final class ServerFactory {
 			}
 
 		case TCPAdvancedImplementation:
-			// TODO fuer Advanced Chat-Protokoll
+			// TODO fuer Advanced Chat-Protokoll (erledigt)
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
