@@ -22,7 +22,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
     }
 
     //alte Methoden der Simple-Chat Lösung
-
     @Override
     protected void loginResponseAction(ChatPDU receivedPdu) {
         if(receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
