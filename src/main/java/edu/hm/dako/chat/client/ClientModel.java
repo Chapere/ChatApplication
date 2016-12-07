@@ -9,7 +9,9 @@ import javafx.collections.ObservableList;
 
 /**
  * Modelldaten fuer FX-GUI
+ * 
  * @author Paul Mandl
+ * 
  */
 public class ClientModel {
 

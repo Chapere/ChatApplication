@@ -2,6 +2,7 @@ package edu.hm.dako.chat.server;
 
 /**
  * Einheitliche Schnittstelle aller Server
+ * 
  * @author Peter Mandl
  */
 public interface ChatServerInterface {

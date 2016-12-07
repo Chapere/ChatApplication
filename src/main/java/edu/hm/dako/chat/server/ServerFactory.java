@@ -14,20 +14,28 @@ import edu.hm.dako.chat.tcp.TcpServerSocket;
 /**
  * Uebernimmt die Konfiguration und Erzeugung bestimmter Server-Typen. Siehe
  * {@link edu.hm.dako.chat.benchmarking.echo.benchmarking.UserInterfaceInputParameters.ImplementationType}
+ * 
  * @author Peter Mandl
  */
 public final class ServerFactory {
 	private static Log log = LogFactory.getLog(ServerFactory.class);
+
 	private ServerFactory() {
 	}
 
 	/**
 	 * Erzeugt einen Chat-Server
-	 * @param implType Implementierungytyp des Servers
-	 * @param serverPort Listenport
-	 * @param sendBufferSize Groesse des Sendepuffers in Byte
-	 * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-	 * @param serverGuiInterface Referenz auf GUI fuer Callback
+	 * 
+	 * @param implType
+	 *          Implementierungytyp des Servers
+	 * @param serverPort
+	 *          Listenport
+	 * @param sendBufferSize
+	 *          Groesse des Sendepuffers in Byte
+	 * @param receiveBufferSize
+	 *          Groesse des Empfangspuffers in Byte
+	 * @param serverGuiInterface
+	 *          Referenz auf GUI fuer Callback
 	 * @return
 	 * @throws Exception
 	 */
@@ -44,6 +52,7 @@ public final class ServerFactory {
 		switch (implType) {
 
 		case TCPSimpleImplementation:
+
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
@@ -54,15 +63,17 @@ public final class ServerFactory {
 			}
 
 		case TCPAdvancedImplementation:
-			// TODO fuer Advanced Chat-Protokoll (erledigt)
+
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
 				return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
-					getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
+						getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
 			} catch (Exception e) {
 				throw new Exception(e);
 			}
+
+
 		default:
 			System.out.println("Dezeit nur TCP implementiert!");
 			throw new RuntimeException("Unknown type: " + implType);
@@ -76,7 +87,9 @@ public final class ServerFactory {
 
 	/**
 	 * Dekoriert Server-Socket mit Logging-Funktionalitaet
+	 * 
 	 * @author mandl
+	 *
 	 */
 	private static class DecoratingServerSocket implements ServerSocketInterface {
 

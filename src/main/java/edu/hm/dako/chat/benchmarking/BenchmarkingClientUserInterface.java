@@ -10,13 +10,16 @@ import javax.swing.JProgressBar;
 
 /**
  * Interface zur Uebergabe von Daten fuer die Ausgabe im Benchmarking-Gui-Client
+ *
  * @author Mandl
  */
 public interface BenchmarkingClientUserInterface {
 
   /**
    * Uebergabe der Startdaten an die GUI
-   * @param data Startdaten
+   *
+   * @param data
+   *          Startdaten
    */
   public void showStartData(UserInterfaceStartData data);
 

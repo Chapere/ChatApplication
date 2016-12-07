@@ -7,9 +7,13 @@ import edu.hm.dako.chat.common.ChatPDU;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.connection.Connection;
 
+import java.io.IOException;
+
 /**
  * Abstrakte Klasse mit Basisfunktionalitaet fuer clientseitige Message-Processing-Threads
+ * 
  * @author Peter Mandl
+ *
  */
 public abstract class AbstractMessageListenerThread extends Thread {
 
@@ -38,7 +42,9 @@ public abstract class AbstractMessageListenerThread extends Thread {
 
   /**
    * Event vom Server zur Veraenderung der UserListe (eingeloggte Clients) verarbeiten
-   * @param receivedPdu Empfangene PDU
+   * 
+   * @param receivedPdu
+   *          Empfangene PDU
    */
   protected void handleUserListEvent(ChatPDU receivedPdu) {
 
@@ -96,7 +102,7 @@ public abstract class AbstractMessageListenerThread extends Thread {
    * @param receivedPdu
    *          Ankommende PDU
    */
-  protected abstract void loginEventAction(ChatPDU receivedPdu);
+  protected abstract void loginEventAction(ChatPDU receivedPdu) throws IOException;
 
   /**
    * Aktion zur Behandlung ankommender Logout-Events.

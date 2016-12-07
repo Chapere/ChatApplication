@@ -1,8 +1,10 @@
 package edu.hm.dako.chat.server;
 
 import java.util.Vector;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import edu.hm.dako.chat.common.ChatPDU;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ClientListEntry;
@@ -14,7 +16,9 @@ import edu.hm.dako.chat.connection.EndOfFileException;
 /**
  * Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client.
  * Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
+ * 
  * @author Mandl
+ *
  */
 public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 
@@ -106,6 +110,8 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 			// anfragenden) senden
 			pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
 			sendLoginListUpdateEvent(pdu);
+
+			//event
 
 			// Login Response senden
 			ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
@@ -218,7 +224,7 @@ public class SimpleChatWorkerThreadImpl extends AbstractWorkerThread {
 				ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(
 						receivedPdu.getUserName(), 0, 0, 0, 0,
 						client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
-						(System.nanoTime() - client.getStartTime()));
+						(System.nanoTime() - client.getStartTime()),receivedPdu.getEventUserName());
 
 				if (responsePdu.getServerTime() / 1000000 > 100) {
 					log.debug(Thread.currentThread().getName()

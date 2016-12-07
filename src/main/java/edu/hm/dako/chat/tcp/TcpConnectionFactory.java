@@ -13,7 +13,9 @@ import edu.hm.dako.chat.connection.ConnectionFactory;
 
 /**
  * Erzeugen von TCP-Verbindungen zum Server
+ * 
  * @author Peter Mandl
+ *
  */
 public class TcpConnectionFactory implements ConnectionFactory {
 

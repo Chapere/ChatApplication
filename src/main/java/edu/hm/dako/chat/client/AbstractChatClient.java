@@ -17,7 +17,9 @@ import edu.hm.dako.chat.tcp.TcpConnectionFactory;
 
 /**
  * Gemeinsame Funktionalitaet fuer alle Client-Implementierungen.
+ * 
  * @author Peter Mandl
+ *
  */
 public abstract class AbstractChatClient implements ClientCommunication {
 
@@ -25,10 +27,14 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
 	// Username (Login-Kennung) des Clients
 	protected String userName;
+
 	protected String threadName;
+
 	protected int localPort;
+
 	protected int serverPort;
 	protected String remoteServerAddress;
+
 	protected ClientUserInterface userInterface;
 
 	// Connection Factory und Verbindung zum Server
@@ -42,15 +48,21 @@ public abstract class AbstractChatClient implements ClientCommunication {
 	protected Thread messageListenerThread;
 
 	/**
-	 * @param userInterface GUI-Interface
-	 * @param serverPort Port des Servers
-	 * @param remoteServerAddress Adresse des Servers
+	 * @param userInterface
+	 *          GUI-Interface
+	 * @param serverPort
+	 *          Port des Servers
+	 * @param remoteServerAddress
+	 *          Adresse des Servers
 	 */
+
 	public AbstractChatClient(ClientUserInterface userInterface, int serverPort,
 			String remoteServerAddress) {
+
 		this.userInterface = userInterface;
 		this.serverPort = serverPort;
 		this.remoteServerAddress = remoteServerAddress;
+
 		/*
 		 * Verbindung zum Server aufbauen
 		 */
@@ -61,7 +73,9 @@ public abstract class AbstractChatClient implements ClientCommunication {
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
+
 		log.debug("Verbindung zum Server steht");
+
 		/*
 		 * Gemeinsame Datenstruktur aufbauen
 		 */
@@ -75,7 +89,9 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
 	/**
 	 * Ergaenzt ConnectionFactory um Logging-Funktionalitaet
-	 * @param connectionFactory ConnectionFactory
+	 * 
+	 * @param connectionFactory
+	 *          ConnectionFactory
 	 * @return Dekorierte ConnectionFactory
 	 */
 	public static ConnectionFactory getDecoratedFactory(
@@ -85,6 +101,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
 	@Override
 	public void login(String name) throws IOException {
+
 		userName = name;
 		sharedClientData.userName = name;
 		sharedClientData.status = ClientConversationStatus.REGISTERING;
@@ -104,6 +121,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
 	@Override
 	public void logout(String name) throws IOException {
+
 		sharedClientData.status = ClientConversationStatus.UNREGISTERING;
 		ChatPDU requestPdu = new ChatPDU();
 		requestPdu.setPduType(PduType.LOGOUT_REQUEST);
@@ -115,6 +133,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 			sharedClientData.logoutCounter.getAndIncrement();
 			log.debug("Logout-Request von " + requestPdu.getUserName()
 					+ " gesendet, LogoutCount = " + sharedClientData.logoutCounter.get());
+
 		} catch (Exception e) {
 			log.debug("Senden der Logout-Nachricht nicht moeglich");
 			throw new IOException();
@@ -123,6 +142,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 
 	@Override
 	public void tell(String name, String text) throws IOException {
+
 		ChatPDU requestPdu = new ChatPDU();
 		requestPdu.setPduType(PduType.CHAT_MESSAGE_REQUEST);
 		requestPdu.setClientStatus(sharedClientData.status);

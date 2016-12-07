@@ -22,11 +22,14 @@ import javafx.stage.WindowEvent;
 
 /**
  * Chat-GUI
+ * 
  * @author Paul Mandl
+ *
  */
 public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	private static Log log = LogFactory.getLog(ClientFxGUI.class);
+
 	private Stage stage;
 	private static LogInGuiController lc;
 	private static LoggedInGuiController lc2;
@@ -41,13 +44,18 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	/**
 	 * Kommunikationsschnittstelle zur Kommunikation mit dem Chat-Server
 	 * aktivieren
-	 * @param String serverType Servertyp
-	 * @param port Serverport
-	 * @param host Hostname oder IP-Adresse des Servers
+	 * 
+	 * @param //String
+	 *          serverType Servertyp
+	 * @param port
+	 *          Serverport
+	 * @param host
+	 *          Hostname oder IP-Adresse des Servers
 	 * @return Referenz auf Kommunikationsobjekt
 	 */
 	public ClientImpl createCommunicator(String serverType, int port, String host) {
-        communicator = new ClientImpl(this, port, host, serverType);
+
+		communicator = new ClientImpl(this, port, host, serverType);
 		return communicator;
 	}
 
@@ -160,12 +168,10 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void abortTest() {
-        //TODO Methode ausführen
 	}
 
 	@Override
 	public void releaseTest() {
-        //TODO Methode ausführen
 	}
 
 	@Override
@@ -186,7 +192,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	public void setSessionStatisticsCounter(long numberOfSentEvents,
 			long numberOfReceivedConfirms, long numberOfLostConfirms, long numberOfRetries,
 			long numberOfReceivedChatMessages) {
-        //TODO Methode ausführen
+
 	}
 
 	@Override
@@ -237,6 +243,6 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void logoutComplete() {
-		log.debug("Abmeldung durchgefuehrt");
+		log.debug("Abnmeldung durchgefuehrt");
 	}
 }

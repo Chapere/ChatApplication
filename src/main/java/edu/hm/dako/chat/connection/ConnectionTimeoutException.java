@@ -2,6 +2,7 @@ package edu.hm.dako.chat.connection;
 
 /**
  * Timeout-Exception bei Verbindung
+ * 
  * @author mandl
  */
 public class ConnectionTimeoutException extends Exception {

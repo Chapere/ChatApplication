@@ -11,6 +11,7 @@ import edu.hm.dako.chat.connection.ServerSocketInterface;
 
 /**
  * Server-Socket Implementierung auf TCP-Basis
+ * 
  * @author Peter Mandl
  */
 public class TcpServerSocket implements ServerSocketInterface {
@@ -23,11 +24,17 @@ public class TcpServerSocket implements ServerSocketInterface {
 
 	/**
 	 * Erzeugt ein TCP-Serversocket und bindet es an einen Port.
-	 * @param port Portnummer, die verwendet werden soll
-	 * @param sendBufferSize Groesse des Sendepuffers in Byte
-	 * @param receiveBufferSize Groesse des Empfangspuffers in Byte
-	 * @exception BindException Port schon belegt
-	 * @exception IOException I/O-Fehler bei der Dovket-Erzeugung
+	 *
+	 * @param port
+	 *          Portnummer, die verwendet werden soll
+	 * @param sendBufferSize
+	 *          Groesse des Sendepuffers in Byte
+	 * @param receiveBufferSize
+	 *          Groesse des Empfangspuffers in Byte
+	 * @exception BindException
+	 *              Port schon belegt
+	 * @exception IOException
+	 *              I/O-Fehler bei der Dovket-Erzeugung
 	 */
 	public TcpServerSocket(int port, int sendBufferSize, int receiveBufferSize)
 			throws BindException, IOException {

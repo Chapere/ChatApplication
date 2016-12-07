@@ -7,13 +7,14 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * <p/>
  * Benchmarking-Client: Simuliert einen Chat-User
+ *
  * @author Mandl
  */
 
 import edu.hm.dako.chat.client.*;
-//import edu.hm.dako.chat.server.AdvancedChatWorkerThreadImpl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.common.ImplementationType;
@@ -124,7 +125,6 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 		case TCPAdvancedImplementation:
 			try {
-				// TODO AdvancedMessageListenerThreadImpl erzeugen und starten (erledigt)
 				messageListenerThread = new AdvancedMessageListenerThreadImpl(this, connection,
 						sharedClientData);
 				messageListenerThread.start();

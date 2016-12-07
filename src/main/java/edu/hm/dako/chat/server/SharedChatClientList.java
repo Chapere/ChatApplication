@@ -487,8 +487,6 @@ public class SharedChatClientList {
 	/**
 	 * Liefert die Laenge der Event-Warteliste fuer einen Client
 	 * 
-	 * @param userName
-	 *          Name des Clients
 	 * @return Anzahl der noch vorhandenen Eintraege in der Liste
 	 */
 	public synchronized int getWaitListSize(String userName) {
@@ -536,4 +534,5 @@ public class SharedChatClientList {
 		}
 		return stringBuilder.toString();
 	}
+
 }

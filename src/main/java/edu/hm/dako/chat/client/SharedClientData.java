@@ -7,7 +7,9 @@ import edu.hm.dako.chat.common.ClientConversationStatus;
 /**
  * Gemeinsame genutzte Daten, die sich der Chat-Client-Thread und die
  * Message-Processing-Threads teilen
+ * 
  * @author Peter Mandl
+ *
  */
 public class SharedClientData {
 

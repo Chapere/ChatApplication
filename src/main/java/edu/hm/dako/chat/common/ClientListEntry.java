@@ -217,4 +217,5 @@ public class ClientListEntry {
 	public synchronized void clearWaitList() {
 		waitList.clear();
 	}
+
 }
