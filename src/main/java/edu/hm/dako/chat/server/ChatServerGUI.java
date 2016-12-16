@@ -99,7 +99,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 
 	// Moegliche Belegungen des Implementierungsfeldes in der GUI
 	ObservableList<String> implTypeOptions = FXCollections.observableArrayList(
-			SystemConstants.IMPL_TCP_SIMPLE, SystemConstants.IMPL_TCP_ADVANCED);
+			SystemConstants.IMPL_TCP_ADVANCED, SystemConstants.IMPL_TCP_SIMPLE);
 
 	/**
 	 * Konstruktion der ServerGUI
@@ -396,7 +396,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			@Override
 			public void handle(ActionEvent event) {
 				System.out.println("ChatServer-GUI ordnungsgemaess beendet");
-				log.debug("Schliessen-Button betaetigt");
+				log.error("Schliessen-Button betaetigt");
 				System.exit(0);
 			}
 		});
@@ -540,9 +540,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			@Override
 			public void run() {
 
-				log.debug("runLater: run-Methode wird ausgefuehrt");
-				log.debug("runLater: Logged in Clients: "
-						+ String.valueOf(loggedInClientCounter.get()));
+				log.error("runLater: run-Methode wird ausgefuehrt");
+				log.error("runLater: Logged in Clients: "+ String.valueOf(loggedInClientCounter.get()));
 
 				loggedInClients.setText(String.valueOf(loggedInClientCounter.get()));
 			}
@@ -560,8 +559,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			@Override
 			public void run() {
 
-				log.debug("runLater: run-Methode wird ausgefuehrt");
-				log.debug("runLater: Received Requests: " + String.valueOf(requestCounter.get()));
+				log.error("runLater: run-Methode wird ausgefuehrt");
+				log.error("runLater: Received Requests: " + String.valueOf(requestCounter.get()));
 
 				receivedRequests.setText(String.valueOf(requestCounter.get()));
 			}
@@ -597,21 +596,21 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 	public void incrNumberOfLoggedInClients() {
 
 		loggedInClientCounter.getAndIncrement();
-		log.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
+		log.error("Eingeloggte Clients: " + loggedInClientCounter.get());
 		updateLoggedInClients();
 	}
 
 	@Override
 	public void decrNumberOfLoggedInClients() {
 		loggedInClientCounter.getAndDecrement();
-		log.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
+		log.error("Eingeloggte Clients: " + loggedInClientCounter.get());
 		updateLoggedInClients();
 	}
 
 	@Override
 	public void incrNumberOfRequests() {
 		requestCounter.getAndIncrement();
-		log.debug(requestCounter.get() + " emfangene Message Requests");
+		log.error(requestCounter.get() + " emfangene Message Requests");
 		updateNumberOfRequests();
 	}
 }

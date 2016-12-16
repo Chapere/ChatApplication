@@ -71,7 +71,7 @@ public class SharedChatClientList {
 		ClientListEntry client = clients.get(userName);
 		client.setStatus(newStatus);
 		clients.replace(userName, client);
-		log.debug("User " + userName + " nun in Status: " + newStatus);
+		log.error("User " + userName + " nun in Status: " + newStatus);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class SharedChatClientList {
 
 		if (userName != null) {
 			if (!clients.containsKey(userName)) {
-				log.debug("User nicht in Clientliste: " + userName);
+				log.error("User nicht in Clientliste: " + userName);
 				return false;
 			} else {
 				return true;
@@ -187,7 +187,7 @@ public class SharedChatClientList {
 		if (existingClient != null) {
 			clients.put(userName, client);
 		} else {
-			log.debug("User nicht in Clientliste: " + userName);
+			log.error("User nicht in Clientliste: " + userName);
 		}
 	}
 
@@ -206,8 +206,7 @@ public class SharedChatClientList {
 			ClientListEntry client = (ClientListEntry) clients.get(s);
 			if (client.getWaitList().contains(userName)) {
 				// Client noch in einer Warteliste
-				log.debug("Loeschen nicht moeglich, da Client " + userName
-						+ " noch in der Warteliste von " + client.getUserName() + " ist");
+				log.error("Loeschen nicht moeglich, da Client " + userName+ " noch in der Warteliste von " + client.getUserName() + " ist");
 				return false;
 			}
 		}
@@ -222,7 +221,7 @@ public class SharedChatClientList {
 	 */
 	public synchronized void deleteClientWithoutCondition(String userName) {
 
-		log.debug("Client  " + userName + " zwangsweise aus allen Listen entfernen");
+		log.error("Client  " + userName + " zwangsweise aus allen Listen entfernen");
 		for (String s : new HashSet<String>(clients.keySet())) {
 			ClientListEntry client = (ClientListEntry) clients.get(s);
 			if (client.getWaitList().contains(userName)) {
@@ -232,7 +231,7 @@ public class SharedChatClientList {
 
 		// Client kann nun entfernt werden
 		clients.remove(userName);
-		log.debug("Client  " + userName + " vollstaendig aus allen Wartelisten entfernt");
+		log.error("Client  " + userName + " vollstaendig aus allen Wartelisten entfernt");
 	}
 
 	/**
@@ -245,30 +244,26 @@ public class SharedChatClientList {
 	 */
 	public synchronized boolean deleteClient(String userName) {
 
-		log.debug("Clientliste vor dem Loeschen von " + userName + ": " + printClientList());
-		log.debug(
-				"Logout fuer " + userName + ", Laenge der Clientliste vor dem Loeschen von: "
-						+ userName + ": " + clients.size());
+		log.error("Clientliste vor dem Loeschen von " + userName + ": " + printClientList());
+		log.error("Logout fuer " + userName + ", Laenge der Clientliste vor dem Loeschen von: "+ userName + ": " + clients.size());
 
 		boolean deletedFlag = false;
 		ClientListEntry removeCandidateClient = (ClientListEntry) clients.get(userName);
 		if (removeCandidateClient != null) {
 
 			// Event-Warteliste des Clients leer?
-			log.debug("Laenge der Clientliste " + userName + ": " + clients.size());
+			log.error("Laenge der Clientliste " + userName + ": " + clients.size());
 			if ((removeCandidateClient.getWaitList().size() == 0)
 					&& (removeCandidateClient.isFinished())) {
 
 				// Warteliste leer, jetzt pruefen, ob er noch in anderen
 				// Wartelisten ist
-				log.debug("Warteliste von Client " + removeCandidateClient.getUserName()
-						+ " ist leer und Client ist zum Beenden vorgemerkt");
+				log.error("Warteliste von Client " + removeCandidateClient.getUserName()+ " ist leer und Client ist zum Beenden vorgemerkt");
 
 				for (String s : new HashSet<String>(clients.keySet())) {
 					ClientListEntry client = (ClientListEntry) clients.get(s);
 					if (client.getWaitList().contains(userName)) {
-						log.debug("Loeschen nicht moeglich, da Client " + userName
-								+ " noch in der Warteliste von " + s + " ist");
+						log.error("Loeschen nicht moeglich, da Client " + userName+ " noch in der Warteliste von " + s + " ist");
 						return deletedFlag;
 					}
 				}
@@ -280,9 +275,8 @@ public class SharedChatClientList {
 			}
 		}
 
-		log.debug("Laenge der Clientliste nach dem Loeschen von " + userName + ": "
-				+ clients.size());
-		log.debug("Clientliste nach dem Loeschen von " + userName + ": " + printClientList());
+		log.error("Laenge der Clientliste nach dem Loeschen von " + userName + ": "+ clients.size());
+		log.error("Clientliste nach dem Loeschen von " + userName + ": " + printClientList());
 		return deletedFlag;
 	}
 
@@ -312,8 +306,7 @@ public class SharedChatClientList {
 				}
 			}
 			if (!clientUsed) {
-				log.debug("Garbace Collection: Client " + client1.getUserName()
-						+ " wird aus ClientListe entfernt");
+				log.error("Garbace Collection: Client " + client1.getUserName()+ " wird aus ClientListe entfernt");
 				deletedClients.add(s1);
 				clients.remove(s1);
 			}
@@ -387,10 +380,9 @@ public class SharedChatClientList {
 		ClientListEntry client = clients.get(userName);
 		if (client != null) {
 			client.setStartTime(startTime);
-			log.debug(
-					"Startzeit fuer Benutzer " + userName + " gesetzt: " + client.getStartTime());
+			log.error("Startzeit fuer Benutzer " + userName + " gesetzt: " + client.getStartTime());
 		} else {
-			log.debug("Startzeit fuer Benutzer konnte nicht gesetzt werden:" + userName);
+			log.error("Startzeit fuer Benutzer konnte nicht gesetzt werden:" + userName);
 		}
 	}
 
@@ -432,9 +424,10 @@ public class SharedChatClientList {
 					client.addWaitListEntry(s);
 				}
 			}
-			log.debug("Warteliste fuer " + userName + " erzeugt");
+			log.error("Warteliste fuer " + userName + " erzeugt");
+			log.error("Wartelistengröße zu Beginn: " + getWaitListSize(userName));
 		} else {
-			log.debug("Warteliste fuer " + userName + " konnte nicht erzeugt werden");
+			log.error("Warteliste fuer " + userName + " konnte nicht erzeugt werden");
 		}
 	}
 
@@ -468,19 +461,18 @@ public class SharedChatClientList {
 
 	public synchronized void deleteWaitListEntry(String userName, String entryName) {
 
-		log.debug("Client: " + userName + ", aus Warteliste von " + entryName + " loeschen ");
+		log.error("Client: " + userName + ", aus Warteliste von " + entryName + " loeschen ");
 
 		ClientListEntry client = clients.get(userName);
 
 		if (client == null) {
-			log.debug("Kein Eintrag fuer " + userName + " in der Clientliste vorhanden");
+			log.error("Kein Eintrag fuer " + userName + " in der Clientliste vorhanden");
 		} else if (client.getWaitList().size() == 0) {
-			log.debug("Warteliste fuer " + userName + " war vorher schon leer");
+			log.error("Warteliste fuer " + userName + " war vorher schon leer");
 			return;
 		} else {
 			client.getWaitList().remove(entryName);
-			log.debug("Eintrag fuer " + entryName + " aus der Warteliste von " + userName
-					+ " geloescht");
+			log.error("Eintrag fuer " + entryName + " aus der Warteliste von " + userName+ " geloescht");
 		}
 	}
 
@@ -509,7 +501,7 @@ public class SharedChatClientList {
 		ClientListEntry client = clients.get(userName);
 		if (client != null) {
 			client.setFinished(true);
-			log.debug("Finished-Kennzeichen gesetzt fuer: " + userName);
+			log.error("Finished-Kennzeichen gesetzt fuer: " + userName);
 		}
 	}
 

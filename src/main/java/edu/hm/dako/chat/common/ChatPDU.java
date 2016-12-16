@@ -172,7 +172,7 @@ public class ChatPDU implements Serializable {
 
   public static void printPdu(ChatPDU pdu) {
     // System.out.println(pdu);
-    log.debug(pdu);
+    log.error(pdu);
   }
 
   public void setClients(Vector<String> clients) {
@@ -410,8 +410,8 @@ public class ChatPDU implements Serializable {
     pdu.setPduType(PduType.LOGIN_RESPONSE);
     pdu.setServerThreadName(Thread.currentThread().getName());
     pdu.setClientThreadName(receivedPdu.getClientThreadName());
-    pdu.setUserName(receivedPdu.getEventUserName());
-    pdu.setEventUserName(eventInitiator);
+    pdu.setUserName(eventInitiator);
+    pdu.setEventUserName(receivedPdu.getEventUserName());
     pdu.setClientStatus(ClientConversationStatus.REGISTERED);
     return pdu;
   }
@@ -494,6 +494,7 @@ public class ChatPDU implements Serializable {
     pdu.setServerThreadName(Thread.currentThread().getName());
     pdu.setClientThreadName(clientThreadName);
     pdu.setClientStatus(ClientConversationStatus.UNREGISTERED);
+    pdu.setEventUserName(eventInitiator);
 
     // Statistikdaten versorgen
     pdu.setNumberOfSentEvents(numberOfSentEvents);
@@ -548,7 +549,7 @@ public class ChatPDU implements Serializable {
 	long numberOfSentEvents, long numberOfLostEventConfirms,
 	long numberOfReceivedEventConfirms, long numberOfRetries,
 	long numberOfReceivedChatMessages, String clientThreadName,
-	long serverTime, String eventUserName) {
+	long serverTime) {
 
     ChatPDU pdu = new ChatPDU();
     pdu.setPduType(PduType.CHAT_MESSAGE_RESPONSE);
@@ -556,7 +557,7 @@ public class ChatPDU implements Serializable {
 
     pdu.setClientThreadName(clientThreadName);
     pdu.setEventUserName(eventInitiator);
-    pdu.setUserName(eventUserName);
+    pdu.setUserName(eventInitiator);
 
     pdu.setClientStatus(ClientConversationStatus.REGISTERED);
 
@@ -570,21 +571,6 @@ public class ChatPDU implements Serializable {
 
     // Serverbearbeitungszeit
     pdu.setServerTime(serverTime);
-    return pdu;
-  }
-
-  public static ChatPDU createChatMessageResponsePdu(String userName, ChatPDU receivedPdu) {
-    ChatPDU pdu = new ChatPDU();
-    pdu.setPduType(PduType.CHAT_MESSAGE_RESPONSE);
-    pdu.setServerThreadName(Thread.currentThread().getName());
-
-    pdu.setClientThreadName(receivedPdu.getClientThreadName());
-    pdu.setEventUserName(receivedPdu.userName);
-    pdu.setUserName(receivedPdu.getUserName());
-    pdu.setClientStatus(ClientConversationStatus.REGISTERED);
-
-    // Serverbearbeitungszeit
-    pdu.setServerTime(receivedPdu.getServerTime());
     return pdu;
   }
 
@@ -617,16 +603,15 @@ public class ChatPDU implements Serializable {
    *          Empfangene PDU
    * @return Erzeugte PDU
    */
-  public static ChatPDU createLoginConfirmPdu(ChatPDU receivedPdu) {
+  public static ChatPDU createLoginConfirmPdu(String userName, ChatPDU receivedPdu) {
 
     ChatPDU pdu = new ChatPDU();
     pdu.setPduType(PduType.LOGIN_EVENT_CONFIRM);
+    pdu.setClientStatus(ClientConversationStatus.REGISTERED);
     pdu.setClientThreadName(Thread.currentThread().getName());
     pdu.setServerThreadName(receivedPdu.getServerThreadName());
-    pdu.setUserName(receivedPdu.getEventUserName());
-    pdu.setEventUserName(receivedPdu.getUserName());
+    pdu.setUserName(userName);
     pdu.setEventUserName(receivedPdu.getEventUserName());
-    pdu.setNumberOfSentEvents(receivedPdu.getNumberOfSentEvents());
     return pdu;
   }
 

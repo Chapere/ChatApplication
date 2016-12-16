@@ -77,8 +77,7 @@ public class TcpConnectionFactory implements ConnectionFactory {
 			}
 		}
 
-		log.debug("Anzahl der Verbindungsaufbauversuche fuer die Verbindung zum Server: "
-				+ connectionTryCounter);
+		log.error("Anzahl der Verbindungsaufbauversuche fuer die Verbindung zum Server: "+ connectionTryCounter);
 		return connection;
 	}
 }

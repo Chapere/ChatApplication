@@ -140,7 +140,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 		Thread.currentThread().setName("Client-Thread-" + String.valueOf(clientNumber + 1));
 		threadName = Thread.currentThread().getName();
 		messageListenerThread.setName("MessageListener-Thread-" + clientNumber);
-		log.debug("Message-Processing-Thread gestartet: " + messageListenerThread.getName());
+		log.error("Message-Processing-Thread gestartet: " + messageListenerThread.getName());
 	}
 
 	/**
@@ -161,14 +161,14 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				Thread.sleep(1);
 				if (sharedClientData.status == ClientConversationStatus.UNREGISTERED) {
 					// Fehlermeldung vom Server beim Login-Vorgang
-					log.debug("User " + userName + " schon im Server angemeldet");
+					log.error("User " + userName + " schon im Server angemeldet");
 					return;
 				}
 			}
 
 			sharedStatistics.incrNumberOfLoggedInClients();
 
-			log.debug("User " + userName + " beim Server angemeldet");
+			log.error("User " + userName + " beim Server angemeldet");
 
 			// Warten, bis alle Clients eingerloggt sind
 			waitForLoggedInClients();
@@ -188,7 +188,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				}
 
 				i++;
-				log.debug("Gesendete Chat-Nachrichten von " + userName + ": " + i);
+				log.error("Gesendete Chat-Nachrichten von " + userName + ": " + i);
 			}
 
 			// Warten, bis alle Clients bereit zum Ausloggen sind (alle Clients
@@ -203,21 +203,15 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 			sharedStatistics.incrNumberOfLoggedOutClients();
 
-			log.debug(
-					"Anzahl gesendeter Requests: " + sharedStatistics.getNumberOfSentRequests());
-			log.debug("Anzahl empfangener Responses: "
-					+ sharedStatistics.getSumOfAllReceivedMessages());
-			log.debug(
-					"Anzahl vom Server empfangener Events: " + sharedClientData.eventCounter.get());
-			log.debug("Anzahl an Server gesendeter Confirms: "
-					+ sharedClientData.confirmCounter.get());
-			log.debug("Durchschnittliche Serverbearbeitungszeit in ns: "
-					+ sharedStatistics.getAverageServerTime() + ", = "
-					+ sharedStatistics.getAverageServerTime() / 1000000 + " ms");
+			log.error("Anzahl gesendeter Requests: " + sharedStatistics.getNumberOfSentRequests());
+			log.error("Anzahl empfangener Responses: "+ sharedStatistics.getSumOfAllReceivedMessages());
+			log.error("Anzahl vom Server empfangener Events: " + sharedClientData.eventCounter.get());
+			log.error("Anzahl an Server gesendeter Confirms: "+sharedClientData.confirmCounter.get());
+			log.error("Durchschnittliche Serverbearbeitungszeit in ns: "+ sharedStatistics.getAverageServerTime() + ", = "+ sharedStatistics.getAverageServerTime() / 1000000 + " ms");
 
 			// Nachbearbeitung fuer die Statistik
 			postLogout();
-			log.debug("User " + userName + " beim Server abgemeldet");
+			log.error("User " + userName + " beim Server abgemeldet");
 
 			// Transportverbindung zum Server abbauen
 			connection.close();
@@ -236,7 +230,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 		setLock(true);
 		try {
 			while (getLock() == true) {
-				log.debug(userName + " wartet auf Chat-Message-Response-PDU");
+				log.error(userName + " wartet auf Chat-Message-Response-PDU");
 				Thread.sleep(1);
 				// Durch den Sleep wird die RTT beim Benchmark ein wenig verfaelscht
 			}
@@ -307,7 +301,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	private void waitForLoggingOutClients() throws InterruptedException {
 		sharedStatistics.getLogoutSignal().countDown();
 		sharedStatistics.getLogoutSignal().await();
-		log.debug("Client " + threadName + " kann beendet werden");
+		log.error("Client " + threadName + " kann beendet werden");
 	}
 
 	/**
@@ -328,9 +322,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 		if (rtt <= serverTime) {
 			// Test, ob Messung plausibel ist, rtt muss groesser als serverTime sein
-			log.error(threadName + ": RTT fuer Request " + (messageNumber + 1) + ": " + rtt
-					+ " ns = " + (rtt / 1000000) + " ms,  benoetigte Serverzeit: " + serverTime
-					+ " ns = " + (serverTime / 1000000) + " ms");
+			log.error(threadName + ": RTT fuer Request " + (messageNumber + 1) + ": " + rtt+ " ns = " + (rtt / 1000000) + " ms,  benoetigte Serverzeit: " + serverTime+ " ns = " + (serverTime / 1000000) + " ms");
 		}
 	}
 
@@ -350,13 +342,11 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				getNumberOfLostConfirms());
 		sharedStatistics.setNumberOfRetriedEvents(clientNumber, getNumberOfRetries());
 
-		log.debug(
-				"Vom Server verarbeitete Chat-Nachrichten: " + getNumberOfReceivedChatMessages());
-		log.debug("Vom Server gesendete Event-Nachrichten: " + getNumberOfSentEvents());
-		log.debug("Dem Server bestaetigte Event-Nachrichten (Confirms): "
-				+ getNumberOfReceivedConfirms());
-		log.debug("Im Server nicht empfangene Bestaetigungen: " + getNumberOfLostConfirms());
-		log.debug("Vom Server initiierte Wiederholungen: " + getNumberOfRetries());
+		log.error("Vom Server verarbeitete Chat-Nachrichten: " + getNumberOfReceivedChatMessages());
+		log.error("Vom Server gesendete Event-Nachrichten: " + getNumberOfSentEvents());
+		log.error("Dem Server bestaetigte Event-Nachrichten (Confirms): "+ getNumberOfReceivedConfirms());
+		log.error("Im Server nicht empfangene Bestaetigungen: " + getNumberOfLostConfirms());
+		log.error("Vom Server initiierte Wiederholungen: " + getNumberOfRetries());
 	}
 
 	@Override
@@ -388,7 +378,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	public synchronized void setLock(boolean lock) {
 		chatResponseReceived.getAndSet(lock);
 		if (chatResponseReceived.get() == false) {
-			log.debug(Thread.currentThread().getName() + " sendet notify");
+			log.error(Thread.currentThread().getName() + " sendet notify");
 			// Antwort auf letzten Request erhalten, naechster Request kann gesendet
 			// werden
 			notifyAll();
@@ -398,7 +388,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 	@Override
 	public synchronized boolean getLock() {
 		if (chatResponseReceived.get() == true) {
-			log.debug(Thread.currentThread().getName() + " wartet auf notify");
+			log.error(Thread.currentThread().getName() + " wartet auf notify");
 			try {
 				wait();
 				return false;
@@ -406,8 +396,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				return false;
 			}
 		} else {
-			log.error(
-					Thread.currentThread().getName() + " muss nicht auf notify warten, Lock frei");
+			log.error(Thread.currentThread().getName() + " muss nicht auf notify warten, Lock frei");
 			return false;
 		}
 	}

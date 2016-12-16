@@ -129,7 +129,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 				@Override
 				public void run() {
 					getModel().users.setAll(users);
-					log.debug(users);
+					log.error(users);
 				}
 			});
 		}
@@ -222,7 +222,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void setErrorMessage(String sender, String errorMessage, long errorCode) {
-		log.debug("errorMessage: " + errorMessage);
+		log.error("errorMessage: " + errorMessage);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -237,12 +237,12 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void loginComplete() {
-		log.debug("Login erfolreich");
+		log.error("Login erfolreich");
 		createNextGui();
 	}
 
 	@Override
 	public void logoutComplete() {
-		log.debug("Abnmeldung durchgefuehrt");
+		log.error("Abmeldung durchgefuehrt");
 	}
 }

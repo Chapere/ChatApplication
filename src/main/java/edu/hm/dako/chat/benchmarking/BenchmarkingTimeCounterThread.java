@@ -31,7 +31,7 @@ public class BenchmarkingTimeCounterThread extends Thread {
    * die Ausgabe
    */
   public void run() {
-    log.debug(getName() + " gestartet");
+    log.error(getName() + " gestartet");
 
     out.resetCurrentRunTime();
 
@@ -39,7 +39,7 @@ public class BenchmarkingTimeCounterThread extends Thread {
 	try {
 	  TimeUnit.SECONDS.sleep(numberOfSeconds);
 	} catch (InterruptedException e) {
-	  log.debug("Sleep unterbrochen");
+	  log.error("Sleep unterbrochen");
 	}
 
 	out.addCurrentRunTime(numberOfSeconds);
@@ -51,6 +51,6 @@ public class BenchmarkingTimeCounterThread extends Thread {
    */
   public void stopThread() {
     running = false;
-    log.debug(getName() + " gestoppt");
+    log.error(getName() + " gestoppt");
   }
 }

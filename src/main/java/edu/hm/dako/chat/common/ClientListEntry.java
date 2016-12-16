@@ -202,12 +202,12 @@ public class ClientListEntry {
 
 	public synchronized void setWaitList(Vector<String> list) {
 		this.waitList = list;
-		log.debug("Warteliste von " + this.userName + ": " + waitList);
+		log.error("Warteliste von " + this.userName + ": " + waitList);
 	}
 
 	public synchronized void addWaitListEntry(String userName) {
 		this.waitList.add(userName);
-		log.debug("Warteliste von " + this.userName + " ergaenzt um " + userName);
+		log.error("Warteliste von " + this.userName + " ergaenzt um " + userName);
 	}
 
 	public synchronized Vector<String> getWaitList() {

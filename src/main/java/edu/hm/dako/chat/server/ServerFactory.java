@@ -42,12 +42,8 @@ public final class ServerFactory {
 	public static ChatServerInterface getServer(ImplementationType implType, int serverPort,
 			int sendBufferSize, int receiveBufferSize,
 			ChatServerGuiInterface serverGuiInterface) throws Exception {
-		log.debug("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: "
-				+ serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "
-				+ receiveBufferSize);
-		System.out.println("ChatServer (" + implType.toString()
-				+ ") wird gestartet, Listen-Port: " + serverPort + ", Sendepuffer: "
-				+ sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
+		log.error("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: "+ serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "+ receiveBufferSize);
+		System.out.println("ChatServer (" + implType.toString()  + ") wird gestartet, Listen-Port: " + serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
 
 		switch (implType) {
 
