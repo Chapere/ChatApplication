@@ -4,10 +4,8 @@ import java.io.IOException;
 import java.net.BindException;
 import java.net.InetAddress;
 import java.net.Socket;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import edu.hm.dako.chat.connection.Connection;
 import edu.hm.dako.chat.connection.ConnectionFactory;
 
