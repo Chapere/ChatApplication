@@ -4,11 +4,10 @@ package edu.hm.dako.chat.server;
  * Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client.
  * Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
  * 
- * @author Thomas Hesse
+ * @author
  *
  */
 
-import com.sun.deploy.util.SessionState;
 import edu.hm.dako.chat.common.ChatPDU;
 import edu.hm.dako.chat.common.ClientConversationStatus;
 import edu.hm.dako.chat.common.ClientListEntry;
@@ -18,18 +17,9 @@ import edu.hm.dako.chat.connection.ConnectionTimeoutException;
 import edu.hm.dako.chat.connection.EndOfFileException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jgroups.demos.Chat;
 
 import java.util.Vector;
-import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Worker-Thread zur serverseitigen Bedienung einer Session mit einem Client.
- * Jedem Chat-Client wird serverseitig ein Worker-Thread zugeordnet.
- *
- * @author Mandl
- *
- */
 public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
     private static Log log = LogFactory.getLog(AdvancedChatWorkerThreadImpl.class);
@@ -42,9 +32,9 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     public void run() {
-        log.error("ChatWorker-Thread erzeugt, Threadname: " + Thread.currentThread().getName());
+        log.debug(
+                "ChatWorker-Thread erzeugt, Threadname: " + Thread.currentThread().getName());
         while (!finished && !Thread.currentThread().isInterrupted()) {
-
             try {
                 // Warte auf naechste Nachricht des Clients und fuehre
                 // entsprechende Aktion aus
@@ -54,7 +44,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                 ExceptionHandler.logException(e);
             }
         }
-        log.error(Thread.currentThread().getName() + " beendet sich");
+        log.debug(Thread.currentThread().getName() + " beendet sich");
         closeConnection();
     }
 
@@ -64,26 +54,30 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         // Liste der eingeloggten bzw. sich einloggenden User ermitteln
         Vector<String> clientList = clients.getRegisteredClientNameList();
 
-        log.error("Aktuelle Clientliste, die an die Clients uebertragen wird: " + clientList);
+        log.debug("Aktuelle Clientliste, die an die Clients uebertragen wird: " + clientList);
 
         pdu.setClients(clientList);
 
         Vector<String> clientList2 = clients.getClientNameList();
         for (String s : new Vector<String>(clientList2)) {
-            log.error("Fuer " + s+ " wird Login- oder Logout-Event-PDU an alle aktiven Clients gesendet");
+            log.debug("Fuer " + s
+                    + " wird Login- oder Logout-Event-PDU an alle aktiven Clients gesendet");
 
             ClientListEntry client = clients.getClient(s);
             try {
                 if (client != null) {
-                    pdu.setUserName(s);
+
                     client.getConnection().send(pdu);
-                    log.error("Login- oder Logout-Event-PDU an " + client.getUserName() + " gesendet");
+                    log.debug(
+                            "Login- oder Logout-Event-PDU an " + client.getUserName() + " gesendet");
                     clients.incrNumberOfSentChatEvents(client.getUserName());
                     eventCounter.getAndIncrement();
-                    log.error(userName + ": EventCounter bei Login/Logout erhoeht = " + eventCounter.get() + ", ConfirmCounter = " + confirmCounter.get());
+                    log.debug(userName + ": EventCounter bei Login/Logout erhoeht = "
+                            + eventCounter.get() + ", ConfirmCounter = " + confirmCounter.get());
                 }
             } catch (Exception e) {
-                log.error("Senden einer Login- oder Logout-Event-PDU an " + s + " nicht moeglich");
+                log.debug(
+                        "Senden einer Login- oder Logout-Event-PDU an " + s + " nicht moeglich");
                 ExceptionHandler.logException(e);
             }
         }
@@ -91,30 +85,60 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     protected void loginRequestAction(ChatPDU receivedPdu) {
+
         ChatPDU pdu;
-        log.error("Login-Request-PDU fuer " + receivedPdu.getUserName() + " empfangen");
+        log.debug("Login-Request-PDU fuer " + receivedPdu.getUserName() + " empfangen");
 
         // Neuer Client moechte sich einloggen, Client in Client-Liste
         // eintragen
         if (!clients.existsClient(receivedPdu.getUserName())) {
-            log.error("User nicht in Clientliste: " + receivedPdu.getUserName());
+            log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
             ClientListEntry client = new ClientListEntry(receivedPdu.getUserName(), connection);
             client.setLoginTime(System.nanoTime());
             clients.createClient(receivedPdu.getUserName(), client);
             clients.changeClientStatus(receivedPdu.getUserName(),
                     ClientConversationStatus.REGISTERING);
-            log.error("User " + receivedPdu.getUserName() + " nun in Clientliste");
-            //WaitList erzeugen
-            clients.createWaitList(receivedPdu.getUserName());
+            log.debug("User " + receivedPdu.getUserName() + " nun in Clientliste");
+
             userName = receivedPdu.getUserName();
             clientThreadName = receivedPdu.getClientThreadName();
             Thread.currentThread().setName(receivedPdu.getUserName());
-            log.error("Laenge der Clientliste: " + clients.size());
+            log.debug("Laenge der Clientliste: " + clients.size());
+            serverGuiInterface.incrNumberOfLoggedInClients();
 
-            // Erstelle Login-Event und Update Login List
+            // Login-Event an alle Clients (auch an den gerade aktuell
+            // anfragenden) senden
             pdu = ChatPDU.createLoginEventPdu(userName, receivedPdu);
             sendLoginListUpdateEvent(pdu);
 
+            // Liste der betroffenen Clients ermitteln
+            Vector<String> sendList = clients.getClientNameList();
+
+            //Waitlist erzeugen
+            clients.createWaitList(receivedPdu.getUserName());
+
+            // Event an Clients senden
+            for (String s : new Vector<String>(sendList)) {
+                client = clients.getClient(s);
+                try {
+                    if ((client != null)
+                            && (client.getStatus() != ClientConversationStatus.UNREGISTERED)) {
+                        pdu.setUserName(client.getUserName());
+                        client.getConnection().send(pdu);
+                        log.debug("Login-Event-PDU an " + client.getUserName() + " gesendet");
+                        clients.incrNumberOfSentChatEvents(client.getUserName());
+                        eventCounter.getAndIncrement();
+                        log.debug(userName + ": EventCounter erhoeht = " + eventCounter.get()
+                                + ", Aktueller ConfirmCounter = " + confirmCounter.get()
+                                + ", Anzahl gesendeter ChatMessages von dem Client = "
+                                + receivedPdu.getSequenceNumber());
+                    }
+                } catch (Exception e) {
+                    log.debug("Senden einer Login-Event-PDU an " + client.getUserName()
+                            + " nicht moeglich");
+                    ExceptionHandler.logException(e);
+                }
+            }
 
         } else {
             // User bereits angemeldet, Fehlermeldung an Client senden,
@@ -123,9 +147,11 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
             try {
                 connection.send(pdu);
-                log.error("Login-Response-PDU an " + receivedPdu.getUserName()+ " mit Fehlercode " + ChatPDU.LOGIN_ERROR + " gesendet");
+                log.debug("Login-Error-Response-PDU an " + receivedPdu.getUserName()
+                        + " mit Fehlercode " + ChatPDU.LOGIN_ERROR + " gesendet");
             } catch (Exception e) {
-                log.error("Senden einer Login-Response-PDU an " + receivedPdu.getUserName()+ " nicht moeglich");
+                log.debug("Senden einer Login-Error-Response-PDU an " + receivedPdu.getUserName()
+                        + " nicth moeglich");
                 ExceptionHandler.logExceptionAndTerminate(e);
             }
         }
@@ -133,23 +159,33 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     protected void logoutRequestAction(ChatPDU receivedPdu) {
+
+        ChatPDU pdu;
         logoutCounter.getAndIncrement();
-        log.error("Logout-Request von " + receivedPdu.getUserName() + " empfangen, LogoutCount = "+ logoutCounter.get());
+        log.debug("Logout-Request von " + receivedPdu.getUserName() + ", LogoutCount = "
+                + logoutCounter.get());
+
+        log.debug("Logout-Request-PDU von " + receivedPdu.getUserName() + " empfangen");
 
         if (!clients.existsClient(userName)) {
-            log.error("User nicht in Clientliste: " + receivedPdu.getUserName());
+            log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
         } else {
-            // Erstelle Logout-Event und Update Login List
-            ChatPDU pdu;
+            ClientListEntry client = new ClientListEntry(receivedPdu.getUserName(), connection);
+            // Event an Client versenden
             pdu = ChatPDU.createLogoutEventPdu(userName, receivedPdu);
-            //WaitList erzeugen
-            clients.createWaitList(receivedPdu.getUserName());
+
+            clients.changeClientStatus(receivedPdu.getUserName(),
+                    ClientConversationStatus.UNREGISTERING);
+            sendLoginListUpdateEvent(pdu);
+            serverGuiInterface.decrNumberOfLoggedInClients();
+
             // Liste der betroffenen Clients ermitteln
             Vector<String> sendList = clients.getClientNameList();
-            pdu.setClients(sendList);
-            // Logout-Event an Clients senden
-            clients.setRequestStartTime(receivedPdu.getUserName(), startTime);
-            ClientListEntry client;
+
+            //Waitlist erzeugen
+            clients.createWaitList(receivedPdu.getUserName());
+
+            //Logout Request an Clients versenden
             for (String s : new Vector<String>(sendList)) {
                 client = clients.getClient(s);
                 try {
@@ -157,77 +193,177 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                             && (client.getStatus() != ClientConversationStatus.UNREGISTERED)) {
                         pdu.setUserName(client.getUserName());
                         client.getConnection().send(pdu);
-                        log.error("Logout-Event-PDU an " + client.getUserName() + " gesendet");
-                        log.error(userName + ": EventCounter erhoeht = " + eventCounter.get()+ ", Aktueller LogoutCounter = " + logoutCounter.get()+ ", Anzahl gesendeter ChatMessages von dem Client = "+ receivedPdu.getSequenceNumber());
+                        log.debug("Logout-Event-PDU an " + client.getUserName() + " gesendet");
+                        clients.incrNumberOfSentChatEvents(client.getUserName());
+                        eventCounter.getAndIncrement();
+                        log.debug(userName + ": EventCounter erhoeht = " + eventCounter.get()
+                                + ", Aktueller ConfirmCounter = " + confirmCounter.get()
+                                + ", Anzahl gesendeter ChatMessages von dem Client = "
+                                + receivedPdu.getSequenceNumber());
                     }
                 } catch (Exception e) {
-                    log.error("Senden einer Logout-Event-PDU an " + client.getUserName()+ " nicht moeglich");
+                    log.debug("Senden einer Logout-Event-PDU an " + client.getUserName()
+                            + " nicht moeglich");
                     ExceptionHandler.logException(e);
                 }
             }
-            log.error("Aktuelle Laenge der ClientListe: " + clients.size());
+
         }
     }
 
     @Override
     protected void chatMessageRequestAction(ChatPDU receivedPdu) {
+
         ClientListEntry client = null;
         clients.setRequestStartTime(receivedPdu.getUserName(), startTime);
         clients.incrNumberOfReceivedChatMessages(receivedPdu.getUserName());
         serverGuiInterface.incrNumberOfRequests();
-        log.error("Chat-Message-Request-PDU von " + receivedPdu.getUserName()+ " mit Sequenznummer " + receivedPdu.getSequenceNumber() + " empfangen");
+        log.debug("Chat-Message-Request-PDU von " + receivedPdu.getUserName()
+                + " mit Sequenznummer " + receivedPdu.getSequenceNumber() + " empfangen");
 
         if (!clients.existsClient(receivedPdu.getUserName())) {
-            log.error("User nicht in Clientliste: " + receivedPdu.getUserName());
+            log.debug("User nicht in Clientliste: " + receivedPdu.getUserName());
         } else {
             // Liste der betroffenen Clients ermitteln
             Vector<String> sendList = clients.getClientNameList();
             ChatPDU pdu = ChatPDU.createChatMessageEventPdu(userName, receivedPdu);
-            //WaitList erzeugen
-            clients.createWaitList(receivedPdu.getUserName());
-            //Event an Clients senden
+
+            // Event an Clients senden
             for (String s : new Vector<String>(sendList)) {
                 client = clients.getClient(s);
                 try {
                     if ((client != null)
                             && (client.getStatus() != ClientConversationStatus.UNREGISTERED)) {
-                        pdu.setUserName(s);
-                        log.error(pdu.toString());
+                        pdu.setUserName(client.getUserName());
                         client.getConnection().send(pdu);
-                        log.error("Chat-Event-PDU an " + client.getUserName() + " gesendet");
+                        log.debug("Chat-Event-PDU an " + client.getUserName() + " gesendet");
                         clients.incrNumberOfSentChatEvents(client.getUserName());
                         eventCounter.getAndIncrement();
-                        log.error(userName + ": EventCounter erhoeht = " + eventCounter.get()+ ", Aktueller ConfirmCounter = " + confirmCounter.get()+ ", Anzahl gesendeter ChatMessages von dem Client = "+ receivedPdu.getSequenceNumber());
+                        log.debug(userName + ": EventCounter erhoeht = " + eventCounter.get()
+                                + ", Aktueller ConfirmCounter = " + confirmCounter.get()
+                                + ", Anzahl gesendeter ChatMessages von dem Client = "
+                                + receivedPdu.getSequenceNumber());
                     }
                 } catch (Exception e) {
-                    log.error("Senden einer Chat-Event-PDU an " + client.getUserName()+ " nicht moeglich");
+                    log.debug("Senden einer Chat-Event-PDU an " + client.getUserName()
+                            + " nicht moeglich");
                     ExceptionHandler.logException(e);
                 }
             }
-            log.error("Aktuelle Laenge der Clientliste: " + clients.size());
+
+            client = clients.getClient(receivedPdu.getUserName());
+
+            log.debug("Aktuelle Laenge der Clientliste: " + clients.size());
         }
     }
+
+    /*
+    Ankommende Logout Confirm PDU verarbeiten und evtl. Response senden
+     */
+    private void logoutConfirmAction(ChatPDU receivedPdu){
+
+        log.debug("Logout Confirm PDU von " + receivedPdu.getEventUserName() + " für User " + receivedPdu.getUserName() + " empfangen.");
+
+        clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
+
+        if(clients.getWaitListSize(receivedPdu.getUserName())==0) {
+
+            clients.changeClientStatus(receivedPdu.getUserName(),
+                    ClientConversationStatus.UNREGISTERED);
+            // Logout Response senden
+            sendLogoutResponse(receivedPdu.getUserName());
+            // Worker-Thread des Clients, der den Logout-Request gesendet
+            // hat, auch gleich zum Beenden markieren
+            clients.finish(receivedPdu.getUserName());
+            log.debug("Laenge der Clientliste beim Vormerken zum Loeschen von "
+                    + receivedPdu.getUserName() + ": " + clients.size());
+        }
+
+    }
+
+    /*
+    Ankommende Chat Message Confirm PDU verarbeiten und ggf. Response senden
+     */
+
+    private void chatMessageConfirmAction(ChatPDU receivedPdu) {
+
+        log.debug("Chat Message Confirm PDU von " + receivedPdu.getEventUserName() + " für User " + receivedPdu.getUserName() + " empfangen.");
+        clients.deleteWaitListEntry(receivedPdu.getEventUserName(),receivedPdu.getUserName());
+
+        if(clients.getWaitListSize(receivedPdu.getUserName())==0){
+            ClientListEntry client = new ClientListEntry(receivedPdu.getUserName(), connection);
+            //ChatMessageResponse senden
+            if (client != null) {
+                ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(
+                        receivedPdu.getUserName(), 0, 0, 0, 0,
+                        client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
+                        (System.nanoTime() - client.getStartTime()));
+                if (responsePdu.getServerTime() / 1000000 > 100) {
+                    log.debug(Thread.currentThread().getName()
+                            + ", Benoetigte Serverzeit vor dem Senden der Response-Nachricht > 100 ms: "
+                            + responsePdu.getServerTime() + " ns = "
+                            + responsePdu.getServerTime() / 1000000 + " ms");
+                }
+                try {
+                    client.getConnection().send(responsePdu);
+                    log.debug(
+                            "Chat-Message-Response-PDU an " + receivedPdu.getUserName() + " gesendet");
+                } catch (Exception e) {
+                    log.debug("Senden einer Chat-Message-Response-PDU an " + client.getUserName()
+                            + " nicht moeglich");
+                    ExceptionHandler.logExceptionAndTerminate(e);
+                }
+            }
+        }
+    }
+
+    private void loginConfirmAction(ChatPDU receivedPdu) {
+
+        log.debug("Login Confirm PDU von " + receivedPdu.getEventUserName() + " für User " + receivedPdu.getUserName() + " empfangen.");
+        clients.deleteWaitListEntry(receivedPdu.getEventUserName(),receivedPdu.getUserName());
+
+        if(clients.getWaitListSize(receivedPdu.getUserName())==0) {
+            // Login Response senden
+            ChatPDU responsePdu = ChatPDU.createLoginResponsePdu(userName, receivedPdu);
+
+            try {
+                clients.getClient(userName).getConnection().send(responsePdu);
+            } catch (Exception e) {
+                log.debug("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
+                log.debug("Exception Message: " + e.getMessage());
+            }
+
+            log.debug("Login-Response-PDU an Client " + userName + " gesendet");
+
+            // Zustand des Clients aendern
+            clients.changeClientStatus(userName, ClientConversationStatus.REGISTERED);
+        }
+    }
+
 
     /**
      * Verbindung zu einem Client ordentlich abbauen
      */
     private void closeConnection() {
 
-        log.error("Schliessen der Chat-Connection zum " + userName);
+        log.debug("Schliessen der Chat-Connection zum " + userName);
 
         // Bereinigen der Clientliste falls erforderlich
 
         if (clients.existsClient(userName)) {
-            log.error("Close Connection fuer " + userName+ ", Laenge der Clientliste vor dem bedingungslosen Loeschen: "+ clients.size());
+            log.debug("Close Connection fuer " + userName
+                    + ", Laenge der Clientliste vor dem bedingungslosen Loeschen: "
+                    + clients.size());
 
-            clients.deleteClient(userName);
-            log.error("Laenge der Clientliste nach dem bedingungslosen Loeschen von " + userName+ ": " + clients.size());
+            clients.deleteClientWithoutCondition(userName);
+            log.debug("Laenge der Clientliste nach dem bedingungslosen Loeschen von " + userName
+                    + ": " + clients.size());
         }
 
         try {
             connection.close();
         } catch (Exception e) {
-            log.error("Exception bei close");
+            log.debug("Exception bei close");
             // ExceptionHandler.logException(e);
         }
     }
@@ -245,20 +381,19 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         if (client != null) {
             ChatPDU responsePdu = ChatPDU.createLogoutResponsePdu(eventInitiatorClient, 0, 0, 0,
                     0, client.getNumberOfReceivedChatMessages(), clientThreadName);
-            log.error(responsePdu.toString());
 
-            log.error(eventInitiatorClient + ": SentEvents aus Clientliste: "+ client.getNumberOfSentEvents() + ": ReceivedConfirms aus Clientliste: "+ client.getNumberOfReceivedEventConfirms());
+            log.debug(eventInitiatorClient + ": SentEvents aus Clientliste: "
+                    + client.getNumberOfSentEvents() + ": ReceivedConfirms aus Clientliste: "
+                    + client.getNumberOfReceivedEventConfirms());
             try {
                 clients.getClient(eventInitiatorClient).getConnection().send(responsePdu);
-                serverGuiInterface.decrNumberOfLoggedInClients();
-                clients.deleteClient(eventInitiatorClient);
-                log.error("Client " + responsePdu.getUserName() + " wurde ausgeloggt.");
             } catch (Exception e) {
-                log.error("Senden einer Logout-Response-PDU an " + eventInitiatorClient+ " fehlgeschlagen");
-                log.error("Exception Message: " + e.getMessage());
+                log.debug("Senden einer Logout-Response-PDU an " + eventInitiatorClient
+                        + " fehlgeschlagen");
+                log.debug("Exception Message: " + e.getMessage());
             }
 
-            log.error("Logout-Response-PDU an Client " + eventInitiatorClient + " gesendet");
+            log.debug("Logout-Response-PDU an Client " + eventInitiatorClient + " gesendet");
         }
     }
 
@@ -279,12 +414,14 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
                     // Loesche den Client aus der Clientliste
                     // Ein Loeschen ist aber nur zulaessig, wenn der Client
                     // nicht mehr in einer anderen Warteliste ist
-                    log.error("Laenge der Clientliste vor dem Entfernen von " + userName + ": "+ clients.size());
+                    log.debug("Laenge der Clientliste vor dem Entfernen von " + userName + ": "
+                            + clients.size());
                     if (clients.deleteClient(userName) == true) {
                         // Jetzt kann auch Worker-Thread beendet werden
 
-                        log.error("Laenge der Clientliste nach dem Entfernen von " + userName + ": "+ clients.size());
-                        log.error("Worker-Thread fuer " + userName + " zum Beenden vorgemerkt");
+                        log.debug("Laenge der Clientliste nach dem Entfernen von " + userName + ": "
+                                + clients.size());
+                        log.debug("Worker-Thread fuer " + userName + " zum Beenden vorgemerkt");
                         return true;
                     }
                 }
@@ -294,7 +431,8 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
         // Garbage Collection in der Clientliste durchfuehren
         Vector<String> deletedClients = clients.gcClientList();
         if (deletedClients.contains(userName)) {
-            log.error("Ueber Garbage Collector ermittelt: Laufender Worker-Thread fuer "+ userName + " kann beendet werden");
+            log.debug("Ueber Garbage Collector ermittelt: Laufender Worker-Thread fuer "
+                    + userName + " kann beendet werden");
             finished = true;
             return true;
         }
@@ -303,7 +441,7 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
     @Override
     protected void handleIncomingMessage() throws Exception {
-        if (checkIfClientIsDeletable() == true) {
+        if (checkIfClientIsDeletable()) {
             return;
         }
 
@@ -323,14 +461,16 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
             // Wartezeit beim Empfang abgelaufen, pruefen, ob der Client
             // ueberhaupt noch etwas sendet
-            log.error("Timeout beim Empfangen, " + RECEIVE_TIMEOUT + " ms ohne Nachricht vom Client");
+            log.debug(
+                    "Timeout beim Empfangen, " + RECEIVE_TIMEOUT + " ms ohne Nachricht vom Client");
 
             if (clients.getClient(userName) != null) {
                 if (clients.getClient(userName)
                         .getStatus() == ClientConversationStatus.UNREGISTERING) {
                     // Worker-Thread wartet auf eine Nachricht vom Client, aber es
                     // kommt nichts mehr an
-                    log.error("Client ist im Zustand UNREGISTERING und bekommt aber keine Nachricht mehr");
+                    log.error(
+                            "Client ist im Zustand UNREGISTERING und bekommt aber keine Nachricht mehr");
                     // Zur Sicherheit eine Logout-Response-PDU an Client senden und
                     // dann Worker-Thread beenden
                     finished = true;
@@ -339,21 +479,24 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
             return;
 
         } catch (EndOfFileException e) {
-            log.error("End of File beim Empfang, vermutlich Verbindungsabbau des Partners");
+            log.debug("End of File beim Empfang, vermutlich Verbindungsabbau des Partners");
             finished = true;
             return;
 
         } catch (java.net.SocketException e) {
-            log.error("Verbindungsabbruch beim Empfang der naechsten Nachricht vom Client "+ getName());
+            log.debug("Verbindungsabbruch beim Empfang der naechsten Nachricht vom Client "
+                    + getName());
             finished = true;
             return;
 
         } catch (Exception e) {
-            log.error("Empfang einer Nachricht fehlgeschlagen, Workerthread fuer User: " + userName);
+            log.debug(
+                    "Empfang einer Nachricht fehlgeschlagen, Workerthread fuer User: " + userName);
             ExceptionHandler.logException(e);
             finished = true;
             return;
         }
+
 
         // Empfangene Nachricht bearbeiten
         try {
@@ -371,130 +514,34 @@ public class AdvancedChatWorkerThreadImpl extends AbstractWorkerThread {
 
                 case LOGOUT_REQUEST:
                     // Logout-Request vom Client empfangen
-                    log.error("Bis hierhin komme ich ('cases')");
                     logoutRequestAction(receivedPdu);
-
                     break;
 
                 case LOGIN_EVENT_CONFIRM:
-                    //Sammlung aller Login Confirms
+                    //Login-Confirm angekommen, muss nun in Waitlist vermerkt werden
                     loginConfirmAction(receivedPdu);
                     break;
 
                 case CHAT_MESSAGE_EVENT_CONFIRM:
-                    //Sammlung aller Chat Message Confirms
+                    //Chat Message-Confirm angekommen, muss nun in Waitlist vermerkt werden
                     chatMessageConfirmAction(receivedPdu);
-                    log.error("Hierher kommt er noch. (casebehandlung)");
                     break;
 
                 case LOGOUT_EVENT_CONFIRM:
-                    //Sammlung aller Logout Confirms
+                    //Logout-Confirm angekommen, muss nun in Waitlist vermerkt werden
                     logoutConfirmAction(receivedPdu);
                     break;
 
                 default:
-                    log.error("Falsche PDU empfangen von Client: " + receivedPdu.getUserName()+ ", PduType: " + receivedPdu.getPduType());
+                    log.debug("Falsche PDU empfangen von Client: " + receivedPdu.getUserName()
+                            + ", PduType: " + receivedPdu.getPduType());
                     break;
             }
         } catch (Exception e) {
-            log.error("Achtung: Exception bei der Nachrichtenverarbeitung");
+            log.error("Exception bei der Nachrichtenverarbeitung");
             ExceptionHandler.logExceptionAndTerminate(e);
         }
     }
 
-    protected void chatMessageConfirmAction(ChatPDU receivedPdu){
-
-        ChatPDU pdu;
-        ClientListEntry client= clients.getClient(receivedPdu.getEventUserName());
-        log.error("Chat-Message-Confirm von " + receivedPdu.getUserName() + " empfangen");
-
-        log.error("Wartelistengröße: " + clients.getWaitListSize(receivedPdu.getUserName()));
-        clients.deleteWaitListEntry(receivedPdu.getEventUserName(),receivedPdu.getUserName());
-        log.error(receivedPdu.getUserName() + " wurde aus Chat Message Warteliste von " + receivedPdu.getEventUserName() + " gelöscht.");
-
-        if (clients.getWaitListSize(receivedPdu.getUserName())==0) {
-            if (client != null) {
-                // Chat Message Response an Client versenden
-                ChatPDU responsePdu = ChatPDU.createChatMessageResponsePdu(
-                        receivedPdu.getEventUserName(), 0, 0, 0, 0,
-                        client.getNumberOfReceivedChatMessages(), receivedPdu.getClientThreadName(),
-                        (System.nanoTime() - client.getStartTime()));
-
-                sendChatMessageResponse(client, responsePdu);
-            }
-        }
-    }
-
-    protected void  loginConfirmAction(ChatPDU receivedPdu){
-        ChatPDU pdu = null;
-        log.error("Login-Confirm von " + receivedPdu.getUserName() + " empfangen, LoginCount = "+ logoutCounter.get());
-
-        log.error("Wartelistengröße: " + clients.getWaitListSize(receivedPdu.getUserName()));
-        clients.deleteWaitListEntry(receivedPdu.getEventUserName(),receivedPdu.getUserName());
-        log.error(receivedPdu.getUserName() + " von Login Waitlist von User " + receivedPdu.getEventUserName() + " gelöscht.");
-
-        if(clients.getWaitListSize(receivedPdu.getEventUserName())==0){
-
-            // Login Response an Client versenden
-            pdu = ChatPDU.createLoginResponsePdu(receivedPdu.getEventUserName(), receivedPdu);
-            sendLoginResponse(pdu);
-            //Waitlist löschen
-            log.error("Gebe Login Response an " + pdu.getUserName() + " zurück.");
-            clients.deleteWaitList(receivedPdu.getEventUserName());
-        }
-
-    }
-
-    protected void logoutConfirmAction(ChatPDU receivedPdu) {
-        log.error("Logout-Confirm von " + receivedPdu.getUserName() + " empfangen, LogoutCount = " + logoutCounter.get());
-
-        log.error("Wartelistengröße: " + clients.getWaitListSize(receivedPdu.getEventUserName()));
-        clients.deleteWaitListEntry(receivedPdu.getEventUserName(), receivedPdu.getUserName());
-        log.error(receivedPdu.getUserName() + " wurde aus Logout Warteliste für " + receivedPdu.getEventUserName() + " entfernt.");
-
-        if (clients.getWaitListSize(receivedPdu.getEventUserName()) == 0) {
-            if (!clients.existsClient(userName)) {
-                log.error("User nicht in Clientliste: " + receivedPdu.getUserName());
-            } else {
-                //Status auf 'Unregistered' setzen
-                clients.changeClientStatus(receivedPdu.getUserName(),
-                        ClientConversationStatus.UNREGISTERED);
-                // Logout Response an Client versenden
-                sendLogoutResponse(receivedPdu.getEventUserName());
-                // Worker-Thread des Clients, der den Logout-Request gesendet
-                // hat, auch gleich zum Beenden markieren
-                clients.finish(receivedPdu.getUserName());
-                log.error("Laenge der Clientliste beim Vormerken zum Loeschen von "+ receivedPdu.getUserName() + ": " + clients.size());
-            }
-        }
-    }
-
-    protected void sendChatMessageResponse(ClientListEntry client, ChatPDU responsePdu){
-
-            try {
-                client.getConnection().send(responsePdu);
-                log.error("Chat-Message-Response-PDU an " + responsePdu.getUserName() + " gesendet");
-                clients.deleteWaitList(responsePdu.getUserName());
-            } catch (Exception e) {
-                log.error("Senden einer Chat-Message-Response-PDU an " + client.getUserName()+ " nicht moeglich");
-                ExceptionHandler.logExceptionAndTerminate(e);
-            }
-    }
-
-    protected void sendLoginResponse(ChatPDU responsePdu){
-
-        // Login Response senden
-
-        try {
-            serverGuiInterface.incrNumberOfLoggedInClients();
-            clients.getClient(responsePdu.getEventUserName()).getConnection().send(responsePdu);
-        } catch (Exception e) {
-            log.error("Senden einer Login-Response-PDU an " + userName + " fehlgeschlagen");
-            log.error("Exception Message: " + e.getMessage());
-        }
-
-        log.error("Login-Response-PDU an Client " + userName + " gesendet");
-
-    }
 
 }

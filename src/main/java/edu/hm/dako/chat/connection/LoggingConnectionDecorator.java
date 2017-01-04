@@ -28,20 +28,20 @@ public class LoggingConnectionDecorator implements Connection {
   @Override
   public synchronized void send(Serializable message) throws Exception {
     ChatPDU pdu = (ChatPDU) message;
-    log.error("Sende Nachricht, Chat-Inhalt: " + pdu.getMessage()+ ", Chat-User: " + pdu.getUserName());
-    log.error("Nachrichten Typ: " + pdu.getPduType());
+    log.debug("Sende Nachricht, Chat-Inhalt: " + pdu.getMessage()
+	  + ", Chat-User: " + pdu.getUserName());
     wrappedConnection.send(message);
     log.trace(pdu);
-    log.error("Nachricht gesendet");
+    log.debug("Nachricht gesendet");
   }
 
   @Override
   public Serializable receive() throws Exception {
-    log.error("Empfange Nachricht...");
+    log.debug("Empfange Nachricht...");
     ChatPDU pdu = (ChatPDU) wrappedConnection.receive();
     if (pdu != null) {
-	log.error("Nachricht empfangen, Chat-Inhalt: " + pdu.getMessage()+ ", Chat-User: " + pdu.getUserName());
-    log.error("Nachrichten Typ: " + pdu.getPduType());
+	log.debug("Nachricht empfangen, Chat-Inhalt: " + pdu.getMessage()
+	    + ", Chat-User: " + pdu.getUserName());
 	log.trace(pdu);
     }
     return pdu;
@@ -49,11 +49,11 @@ public class LoggingConnectionDecorator implements Connection {
 
   @Override
   public Serializable receive(int timeout) throws Exception {
-    log.error("Empfange Nachricht...");
+    log.debug("Empfange Nachricht...");
     ChatPDU pdu = (ChatPDU) wrappedConnection.receive(timeout);
     if (pdu != null) {
-	log.error("Nachricht empfangen, Chat-Inhalt: " + pdu.getMessage()+ ", Chat-User: " + pdu.getUserName());
-    log.error("Nachrichten Typ: " + pdu.getPduType());
+	log.debug("Nachricht empfangen, Chat-Inhalt: " + pdu.getMessage()
+	    + ", Chat-User: " + pdu.getUserName());
 	log.trace(pdu);
     }
     return pdu;
@@ -61,8 +61,8 @@ public class LoggingConnectionDecorator implements Connection {
 
   @Override
   public void close() throws Exception {
-    log.error("Schliesse Connection...");
+    log.debug("Schliesse Connection...");
     wrappedConnection.close();
-    log.error("Connection geschlossen!");
+    log.debug("Connection geschlossen!");
   }
 }

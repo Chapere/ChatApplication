@@ -178,7 +178,7 @@ public class SharedClientStatistics {
 		clientGui.countUpProgressTask();
 
 		if (numberOfLoggedInClients == numberOfClients) {
-			log.error("Alle " + numberOfClients + " Test-Clients angemeldet");
+			log.debug("Alle " + numberOfClients + " Test-Clients angemeldet");
 		}
 	}
 
@@ -190,7 +190,7 @@ public class SharedClientStatistics {
 		numberOfLoggedOutClients++;
 		clientGui.countUpProgressTask();
 		if (numberOfLoggedOutClients == numberOfClients) {
-			log.error("Alle " + numberOfClients + " Test-Clients abgemeldet");
+			log.debug("Alle " + numberOfClients + " Test-Clients abgemeldet");
 		}
 	}
 
@@ -960,9 +960,9 @@ public class SharedClientStatistics {
 		try {
 			boolean exist = file.createNewFile();
 			if (!exist) {
-				log.error("Datei " + fileName + " existierte bereits");
+				log.debug("Datei " + fileName + " existierte bereits");
 			} else {
-				log.error("Datei " + fileName + " erfolgreich angelegt");
+				log.debug("Datei " + fileName + " erfolgreich angelegt");
 			}
 
 			// Datei zum Erweitern oeffnen

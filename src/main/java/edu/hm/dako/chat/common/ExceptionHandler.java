@@ -29,7 +29,7 @@ public class ExceptionHandler {
 		} catch (UnknownHostException e) {
 			log.error("Exception bei Adressebelegung: " + e);
 		} catch (IOException e) {
-			log.error("Senden oder Empfangen von Nachrichten nicht moeglich: " + e);
+			log.debug("Senden oder Empfangen von Nachrichten nicht moeglich: " + e);
 		} catch (InterruptedException e) {
 			log.error("Sleep unterbrochen");
 		} catch (ClassNotFoundException e) {

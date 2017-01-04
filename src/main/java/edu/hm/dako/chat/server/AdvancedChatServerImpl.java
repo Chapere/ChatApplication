@@ -1,5 +1,14 @@
 package edu.hm.dako.chat.server;
 
+/**
+ * <p/>
+ * Advanced-Chat-Server-Implementierung Der ChatServer wird in einem eigenen
+ * Thread gestartet. Er nimmt alle Verbindungsaufbauwuensche der ChatClients
+ * entgegen und startet fuer jede Verbindung jeweils einen eigenen Worker-Thread
+ *
+ * @author
+ */
+
 import edu.hm.dako.chat.common.ClientListEntry;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.connection.Connection;
@@ -7,41 +16,33 @@ import edu.hm.dako.chat.connection.ServerSocketInterface;
 import javafx.concurrent.Task;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Advanced-Chat-Server-Implementierung Der ChatServer wird in einem eigenen
- * Thread gestartet. Er nimmt alle Verbindungsaufbauwuensche der ChatClients
- * entgegen und startet fuer jede Verbindung jeweils einen eigenen Worker-Thread
- * @author NONAME
- */
+
 public class AdvancedChatServerImpl extends AbstractChatServer {
-    /**
-     *
-     */
-    private static Log log = LogFactory.getLog(SimpleChatServerImpl.class);
-    /**
-     *
-     */
+
+    private static Log log = LogFactory.getLog(AdvancedChatServerImpl.class);
+
+    // Threadpool fuer Worker-Threads
     private final ExecutorService executorService;
-    /**
-     *
-     */
+
     // Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
     // entgegennimmt
     private ServerSocketInterface socket;
 
     /**
      * Konstruktor
-     * @param executorService Executor
-     * @param socket Socket
-     * @param serverGuiInterface Interface
+     *
+     * @param executorService
+     * @param socket
+     * @param serverGuiInterface
      */
     public AdvancedChatServerImpl(ExecutorService executorService,
-                                  ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
-        log.error("AdvancedChatServerImpl konstruiert");
+                                ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
+        log.debug("AdvancedChatServerImpl konstruiert");
         this.executorService = executorService;
         this.socket = socket;
         this.serverGuiInterface = serverGuiInterface;
@@ -51,9 +52,6 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
         counter.confirmCounter = new AtomicInteger(0);
     }
 
-    /**
-     *
-     */
     @Override
     public void start() {
         Task<Void> task = new Task<Void>() {
@@ -69,16 +67,17 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
                                 "AdvancedChatServer wartet auf Verbindungsanfragen von Clients...");
 
                         Connection connection = socket.accept();
-                        log.error("Neuer Verbindungsaufbauwunsch empfangen");
+                        log.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
                         // Neuen Workerthread starten
                         executorService.submit(new AdvancedChatWorkerThreadImpl(connection, clients,
                                 counter, serverGuiInterface));
                     } catch (Exception e) {
                         if (socket.isClosed()) {
-                            log.error("Socket wurde geschlossen");
+                            log.debug("Socket wurde geschlossen");
                         } else {
-                            log.error("Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
+                            log.error(
+                                    "Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
                             ExceptionHandler.logException(e);
                         }
                     }
@@ -93,12 +92,9 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
 
     }
 
-    /**
-     *
-     * @throws Exception
-     */
     @Override
     public void stop() throws Exception {
+
         // Alle Verbindungen zu aktiven Clients abbauen
         Vector<String> sendList = clients.getClientNameList();
         for (String s : new Vector<String>(sendList)) {
@@ -109,7 +105,8 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
                     log.error("Verbindung zu Client " + client.getUserName() + " geschlossen");
                 }
             } catch (Exception e) {
-                log.error("Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
+                log.debug(
+                        "Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
                 ExceptionHandler.logException(e);
             }
         }
@@ -118,9 +115,9 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
         clients.deleteAll();
         Thread.currentThread().interrupt();
         socket.close();
-        log.error("Listen-Socket geschlossen");
+        log.debug("Listen-Socket geschlossen");
         executorService.shutdown();
-        log.error("Threadpool freigegeben");
+        log.debug("Threadpool freigegeben");
 
         System.out.println("AdvancedChatServer beendet sich");
     }

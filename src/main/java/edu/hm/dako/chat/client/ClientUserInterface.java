@@ -37,8 +37,8 @@ public interface ClientUserInterface {
 
 	/**
 	 * Lesen der Sperre
-	 *
-	 * @param //Lock
+	 * 
+	 * @param lock
 	 *          true, wenn Client warten muss, sonst false
 	 */
 	public boolean getLock();

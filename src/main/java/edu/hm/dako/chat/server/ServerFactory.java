@@ -42,8 +42,12 @@ public final class ServerFactory {
 	public static ChatServerInterface getServer(ImplementationType implType, int serverPort,
 			int sendBufferSize, int receiveBufferSize,
 			ChatServerGuiInterface serverGuiInterface) throws Exception {
-		log.error("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: "+ serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "+ receiveBufferSize);
-		System.out.println("ChatServer (" + implType.toString()  + ") wird gestartet, Listen-Port: " + serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
+		log.debug("ChatServer (" + implType.toString() + ") wird gestartet, Serverport: "
+				+ serverPort + ", Sendepuffer: " + sendBufferSize + ", Empfangspuffer: "
+				+ receiveBufferSize);
+		System.out.println("ChatServer (" + implType.toString()
+				+ ") wird gestartet, Listen-Port: " + serverPort + ", Sendepuffer: "
+				+ sendBufferSize + ", Empfangspuffer: " + receiveBufferSize);
 
 		switch (implType) {
 
@@ -58,17 +62,16 @@ public final class ServerFactory {
 				throw new Exception(e);
 			}
 
-		case TCPAdvancedImplementation:
+			case TCPAdvancedImplementation:
 
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
-				return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
+				return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
 						getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
 			} catch (Exception e) {
 				throw new Exception(e);
 			}
-
 
 		default:
 			System.out.println("Dezeit nur TCP implementiert!");

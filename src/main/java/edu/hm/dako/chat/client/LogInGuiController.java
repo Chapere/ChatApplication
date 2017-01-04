@@ -73,7 +73,7 @@ public class LogInGuiController implements Initializable {
 
 		userName = txtUsername.getText();
 		if (userName.isEmpty() == true) {
-			log.error("Benutzername ist leer");
+			log.debug("Benutzername ist leer");
 			appController.setErrorMessage("Chat-Client", "Benutzername fehlt", 1);
 			return;
 		} else {
@@ -100,7 +100,7 @@ public class LogInGuiController implements Initializable {
 			if ((serverPort < 1) || (serverPort > 65535)) {
 				appController.setErrorMessage("Chat-Client",
 						"Serverport ist nicht im Wertebereich von 1 bis 65535!", 2);
-				log.error("Serverport nicht im Wertebereich");
+				log.debug("Serverport nicht im Wertebereich");
 				lblServerPort.setTextFill(Color.web(SystemConstants.RED_COLOR));
 				return;
 			} else {

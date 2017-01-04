@@ -147,7 +147,7 @@ public class BenchmarkingClientCoordinator extends Thread
 				+ (parm.getNumberOfClients() * parm.getNumberOfClients())
 				+ (parm.getNumberOfClients() * parm.getNumberOfClients());
 
-		log.error("Anzahl geplanter Event-Nachrichten: " + numberOfPlannedEventMessages);
+		log.debug("Anzahl geplanter Event-Nachrichten: " + numberOfPlannedEventMessages);
 		startData.setNumberOfPlannedEventMessages(numberOfPlannedEventMessages);
 
 		clientGui.showStartData(startData);
@@ -184,7 +184,9 @@ public class BenchmarkingClientCoordinator extends Thread
 
 		clientGui.testFinished();
 
-		log.error("Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Uebertragungswiederholungen): " + sharedData.getSumOfAllRetries());
+		log.debug(
+				"Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Uebertragungswiederholungen): "
+						+ sharedData.getSumOfAllRetries());
 
 		// Datensatz fuer Benchmark-Lauf auf Protokolldatei schreiben
 		sharedData.writeStatisticSet("Benchmarking-ChatApp-Protokolldatei",

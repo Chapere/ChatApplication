@@ -45,7 +45,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 	 * Kommunikationsschnittstelle zur Kommunikation mit dem Chat-Server
 	 * aktivieren
 	 * 
-	 * @param //String
+	 * @param String
 	 *          serverType Servertyp
 	 * @param port
 	 *          Serverport
@@ -129,7 +129,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 				@Override
 				public void run() {
 					getModel().users.setAll(users);
-					log.error(users);
+					log.debug(users);
 				}
 			});
 		}
@@ -222,7 +222,7 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void setErrorMessage(String sender, String errorMessage, long errorCode) {
-		log.error("errorMessage: " + errorMessage);
+		log.debug("errorMessage: " + errorMessage);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {
@@ -237,12 +237,12 @@ public class ClientFxGUI extends Application implements ClientUserInterface {
 
 	@Override
 	public void loginComplete() {
-		log.error("Login erfolreich");
+		log.debug("Login erfolreich");
 		createNextGui();
 	}
 
 	@Override
 	public void logoutComplete() {
-		log.error("Abmeldung durchgefuehrt");
+		log.debug("Abnmeldung durchgefuehrt");
 	}
 }

@@ -67,7 +67,7 @@ public class LoggedInGuiController {
 		btnSubmit.disableProperty().bind(appController.getModel().block);
 	}
 
-	public void btnLogOut_OnAction() throws InterruptedException {
+	public void btnLogOut_OnAction() {
 		try {
 			appController.getCommunicator().logout(appController.getModel().getUserName());
 		} catch (IOException e) {
@@ -77,8 +77,7 @@ public class LoggedInGuiController {
 					5);
 		}
 
-		// Verbindung zum Server wird sicherheitshalber nochmals abgebaut
-		Thread.sleep(1000);
+		// Verbindung zum Server wird sicherheitshalber rnochmals abgebaut
 		appController.getCommunicator().cancelConnection();
 
 		System.exit(0);

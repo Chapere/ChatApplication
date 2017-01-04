@@ -44,10 +44,12 @@ public class TcpServerSocket implements ServerSocketInterface {
 		try {
 			serverSocket = new java.net.ServerSocket(port);
 		} catch (BindException e) {
-			log.error("Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
+			log.debug(
+					"Port " + port + " auf dem Rechner schon in Benutzung, Bind Exception: " + e);
 			throw e;
 		} catch (IOException e) {
-			log.error("Schwerwiegender Fehler beim Anlegen eines TCP-Sockets mit Portnummer " + port + ": " + e);
+			log.debug("Schwerwiegender Fehler beim Anlegen eines TCP-Sockets mit Portnummer "
+					+ port + ": " + e);
 			throw e;
 		}
 	}
@@ -60,7 +62,8 @@ public class TcpServerSocket implements ServerSocketInterface {
 
 	@Override
 	public void close() throws IOException {
-		log.error("Serversocket wird geschlossen, lokaler Port: " + serverSocket.getLocalPort());
+		log.debug(
+				"Serversocket wird geschlossen, lokaler Port: " + serverSocket.getLocalPort());
 		serverSocket.close();
 	}
 

@@ -30,7 +30,8 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 		if (receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
 
 			// Login hat nicht funktioniert
-			log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()+ " mit Login-Error empfangen");
+			log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()
+					+ " mit Login-Error empfangen");
 			userInterface.setErrorMessage(
 					"Chat-Server", "Anmelden beim Server nicht erfolgreich, Benutzer "
 							+ receivedPdu.getUserName() + " vermutlich schon angemeldet",
@@ -50,7 +51,8 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 			userInterface.loginComplete();
 
 			Thread.currentThread().setName("Listener" + "-" + sharedClientData.userName);
-			log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
+			log.debug(
+					"Login-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
 		}
 	}
 
@@ -70,13 +72,15 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 	@Override
 	protected void logoutResponseAction(ChatPDU receivedPdu) {
 
-		log.error(sharedClientData.userName + " empfaengt Logout-Response-PDU fuer Client "+ receivedPdu.getUserName());
+		log.debug(sharedClientData.userName + " empfaengt Logout-Response-PDU fuer Client "
+				+ receivedPdu.getUserName());
 		sharedClientData.status = ClientConversationStatus.UNREGISTERED;
 
 		userInterface.setSessionStatisticsCounter(sharedClientData.eventCounter.longValue(),
 				sharedClientData.confirmCounter.longValue(), 0, 0, 0);
 
-		log.error("Vom Client gesendete Chat-Nachrichten:  "+ sharedClientData.messageCounter.get());
+		log.debug("Vom Client gesendete Chat-Nachrichten:  "
+				+ sharedClientData.messageCounter.get());
 
 		finished = true;
 		userInterface.logoutComplete();
@@ -98,9 +102,14 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 	@Override
 	protected void chatMessageResponseAction(ChatPDU receivedPdu) {
 
-		log.error("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + ": "+ receivedPdu.getSequenceNumber() + ", Messagecounter: "+ sharedClientData.messageCounter.get());
+		log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + ": "
+				+ receivedPdu.getSequenceNumber() + ", Messagecounter: "
+				+ sharedClientData.messageCounter.get());
 
-		log.error(Thread.currentThread().getName()+ ", Benoetigte Serverzeit gleich nach Empfang der Response-Nachricht: "+ receivedPdu.getServerTime() + " ns = " + receivedPdu.getServerTime() / 1000000+ " ms");
+		log.debug(Thread.currentThread().getName()
+				+ ", Benoetigte Serverzeit gleich nach Empfang der Response-Nachricht: "
+				+ receivedPdu.getServerTime() + " ns = " + receivedPdu.getServerTime() / 1000000
+				+ " ms");
 
 		if (receivedPdu.getSequenceNumber() == sharedClientData.messageCounter.get()) {
 
@@ -111,17 +120,21 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 			// Naechste Chat-Nachricht darf eingegeben werden
 			userInterface.setLock(false);
 
-			log.error("Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
+			log.debug(
+					"Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
 
 		} else {
-			log.error("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName()+ " passt nicht: " + receivedPdu.getSequenceNumber() + "/"+ sharedClientData.messageCounter.get());
+			log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName()
+					+ " passt nicht: " + receivedPdu.getSequenceNumber() + "/"
+					+ sharedClientData.messageCounter.get());
 		}
 	}
 
 	@Override
 	protected void chatMessageEventAction(ChatPDU receivedPdu) {
 
-		log.error("Chat-Message-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
+		log.debug(
+				"Chat-Message-Event-PDU von " + receivedPdu.getEventUserName() + " empfangen");
 
 		// Eventzaehler fuer Testzwecke erhoehen
 		sharedClientData.eventCounter.getAndIncrement();
@@ -139,20 +152,20 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 
 		ChatPDU receivedPdu = null;
 
-		log.error("SimpleMessageListenerThread gestartet");
+		log.debug("SimpleMessageListenerThread gestartet");
 
 		while (!finished) {
 
 			try {
 				// Naechste ankommende Nachricht empfangen
-				log.error("Auf die naechste Nachricht vom Server warten");
+				log.debug("Auf die naechste Nachricht vom Server warten");
 				receivedPdu = receive();
-				log.error("Nach receive Aufruf, ankommende PDU mit PduType = "+ receivedPdu.getPduType());
+				log.debug("Nach receive Aufruf, ankommende PDU mit PduType = "
+						+ receivedPdu.getPduType());
 			} catch (Exception e) {
 				finished = true;
 			}
 
-//TODO Hier Fallbehandlung einbauen, wie mit Confirms umgegangen werden soll
 			if (receivedPdu != null) {
 
 				switch (sharedClientData.status) {
@@ -187,7 +200,8 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 						break;
 
 					default:
-						log.error("Ankommende PDU im Zustand " + sharedClientData.status+ " wird verworfen");
+						log.debug("Ankommende PDU im Zustand " + sharedClientData.status
+								+ " wird verworfen");
 					}
 					break;
 
@@ -222,7 +236,8 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 						break;
 
 					default:
-						log.error("Ankommende PDU im Zustand " + sharedClientData.status+ " wird verworfen");
+						log.debug("Ankommende PDU im Zustand " + sharedClientData.status
+								+ " wird verworfen");
 					}
 					break;
 
@@ -255,18 +270,20 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 						break;
 
 					default:
-						log.error("Ankommende PDU im Zustand " + sharedClientData.status+ " wird verworfen");
+						log.debug("Ankommende PDU im Zustand " + sharedClientData.status
+								+ " wird verworfen");
 						break;
 					}
 					break;
 
 				case UNREGISTERED:
-					log.error("Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
+					log.debug(
+							"Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
 
 					break;
 
 				default:
-					log.error("Unzulaessiger Zustand " + sharedClientData.status);
+					log.debug("Unzulaessiger Zustand " + sharedClientData.status);
 				}
 			}
 		}
@@ -277,7 +294,8 @@ public class SimpleMessageListenerThreadImpl extends AbstractMessageListenerThre
 		} catch (Exception e) {
 			ExceptionHandler.logException(e);
 		}
-		log.error("Ordnungsgemaesses Ende des SimpleMessageListener-Threads fuer User"+ sharedClientData.userName + ", Status: " + sharedClientData.status);
+		log.debug("Ordnungsgemaesses Ende des SimpleMessageListener-Threads fuer User"
+				+ sharedClientData.userName + ", Status: " + sharedClientData.status);
 	} // run
 
 }
