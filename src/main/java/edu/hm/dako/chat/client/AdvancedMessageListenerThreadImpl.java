@@ -29,8 +29,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         if (receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
 
             // Login hat nicht funktioniert
-            //log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()
-                    + " mit Login-Error empfangen");
+            //log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()+ " mit Login-Error empfangen");
             userInterface.setErrorMessage(
                     "Chat-Server", "Anmelden beim Server nicht erfolgreich, Benutzer "
                             + receivedPdu.getUserName() + " vermutlich schon angemeldet",
@@ -50,8 +49,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             userInterface.loginComplete();
 
             Thread.currentThread().setName("Listener" + "-" + sharedClientData.userName);
-            //log.debug(
-                    "Login-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
+            //log.debug("Login-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
         }
     }
 
@@ -79,15 +77,13 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
     @Override
     protected void logoutResponseAction(ChatPDU receivedPdu) {
 
-        //log.debug(sharedClientData.userName + " empfaengt Logout-Response-PDU fuer Client "
-                + receivedPdu.getUserName());
+        //log.debug(sharedClientData.userName + " empfaengt Logout-Response-PDU fuer Client "+ receivedPdu.getUserName());
         sharedClientData.status = ClientConversationStatus.UNREGISTERED;
 
         userInterface.setSessionStatisticsCounter(sharedClientData.eventCounter.longValue(),
                 sharedClientData.confirmCounter.longValue(), 0, 0, 0);
 
-        //log.debug("Vom Client gesendete Chat-Nachrichten:  "
-                + sharedClientData.messageCounter.get());
+        //log.debug("Vom Client gesendete Chat-Nachrichten:  "+ sharedClientData.messageCounter.get());
 
         finished = true;
         userInterface.logoutComplete();
@@ -118,14 +114,9 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
     @Override
     protected void chatMessageResponseAction(ChatPDU receivedPdu) {
 
-        //log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + ": "
-                + receivedPdu.getSequenceNumber() + ", Messagecounter: "
-                + sharedClientData.messageCounter.get());
+        //log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName() + ": "+ receivedPdu.getSequenceNumber() + ", Messagecounter: "+ sharedClientData.messageCounter.get());
 
-        //log.debug(Thread.currentThread().getName()
-                + ", Benoetigte Serverzeit gleich nach Empfang der Response-Nachricht: "
-                + receivedPdu.getServerTime() + " ns = " + receivedPdu.getServerTime() / 1000000
-                + " ms");
+        //log.debug(Thread.currentThread().getName()+ ", Benoetigte Serverzeit gleich nach Empfang der Response-Nachricht: "+ receivedPdu.getServerTime() + " ns = " + receivedPdu.getServerTime() / 1000000+ " ms");
 
         if (receivedPdu.getSequenceNumber() == sharedClientData.messageCounter.get()) {
 
@@ -136,13 +127,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             // Naechste Chat-Nachricht darf eingegeben werden
             userInterface.setLock(false);
 
-            //log.debug(
-                    "Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
+            //log.debug("Chat-Response-PDU fuer Client " + receivedPdu.getUserName() + " empfangen");
 
         } else {
-            //log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName()
-                    + " passt nicht: " + receivedPdu.getSequenceNumber() + "/"
-                    + sharedClientData.messageCounter.get());
+            //log.debug("Sequenznummer der Chat-Response-PDU " + receivedPdu.getUserName()+ " passt nicht: " + receivedPdu.getSequenceNumber() + "/"+ sharedClientData.messageCounter.get());
         }
     }
 
@@ -183,8 +171,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                 // Naechste ankommende Nachricht empfangen
                 //log.debug("Auf die naechste Nachricht vom Server warten");
                 receivedPdu = receive();
-                //log.debug("Nach receive Aufruf, ankommende PDU mit PduType = "
-                        + receivedPdu.getPduType());
+                //log.debug("Nach receive Aufruf, ankommende PDU mit PduType = "+ receivedPdu.getPduType());
             } catch (Exception e) {
                 finished = true;
             }
@@ -223,8 +210,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                                 break;
 
                             default:
-                                //log.debug("Ankommende PDU im Zustand " + sharedClientData.status
-                                        + " wird verworfen");
+                                //log.debug("Ankommende PDU im Zustand " + sharedClientData.status+ " wird verworfen");
                         }
                         break;
 
@@ -259,8 +245,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                                 break;
 
                             default:
-                                //log.debug("Ankommende PDU im Zustand " + sharedClientData.status
-                                        + " wird verworfen");
+                                //log.debug("Ankommende PDU im Zustand " + sharedClientData.status+ " wird verworfen");
                         }
                         break;
 
@@ -293,15 +278,13 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                                 break;
 
                             default:
-                                //log.debug("Ankommende PDU im Zustand " + sharedClientData.status
-                                        + " wird verworfen");
+                                //log.debug("Ankommende PDU im Zustand " + sharedClientData.status+ " wird verworfen");
                                 break;
                         }
                         break;
 
                     case UNREGISTERED:
-                        //log.debug(
-                                "Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
+                        //log.debug("Ankommende PDU im Zustand " + sharedClientData.status + " wird verworfen");
 
                         break;
 
@@ -317,8 +300,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         } catch (Exception e) {
             ExceptionHandler.logException(e);
         }
-        //log.debug("Ordnungsgemaesses Ende des AdvancedMessageListener-Threads fuer User"
-                + sharedClientData.userName + ", Status: " + sharedClientData.status);
+        //log.debug("Ordnungsgemaesses Ende des AdvancedMessageListener-Threads fuer User"+ sharedClientData.userName + ", Status: " + sharedClientData.status);
     } // run
 
 }

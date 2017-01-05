@@ -46,8 +46,7 @@ public abstract class AbstractMessageListenerThread extends Thread {
    */
   protected void handleUserListEvent(ChatPDU receivedPdu) {
 
-    //log.debug("Login- oder Logout-Event-PDU fuer "
-	  + receivedPdu.getUserName() + " empfangen");
+    //log.debug("Login- oder Logout-Event-PDU fuer "+ receivedPdu.getUserName() + " empfangen");
 
     // Neue Userliste zur Darstellung an User Interface uebergeben
     //log.debug("Empfangene Userliste: " + receivedPdu.getClients());

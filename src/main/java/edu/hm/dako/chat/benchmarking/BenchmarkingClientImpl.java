@@ -203,17 +203,11 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 			sharedStatistics.incrNumberOfLoggedOutClients();
 
-			//log.debug(
-					"Anzahl gesendeter Requests: " + sharedStatistics.getNumberOfSentRequests());
-			//log.debug("Anzahl empfangener Responses: "
-					+ sharedStatistics.getSumOfAllReceivedMessages());
-			//log.debug(
-					"Anzahl vom Server empfangener Events: " + sharedClientData.eventCounter.get());
-			//log.debug("Anzahl an Server gesendeter Confirms: "
-					+ sharedClientData.confirmCounter.get());
-			//log.debug("Durchschnittliche Serverbearbeitungszeit in ns: "
-					+ sharedStatistics.getAverageServerTime() + ", = "
-					+ sharedStatistics.getAverageServerTime() / 1000000 + " ms");
+			//log.debug("Anzahl gesendeter Requests: " + sharedStatistics.getNumberOfSentRequests());
+			//log.debug("Anzahl empfangener Responses: "+ sharedStatistics.getSumOfAllReceivedMessages());
+			//log.debug("Anzahl vom Server empfangener Events: " + sharedClientData.eventCounter.get());
+			//log.debug("Anzahl an Server gesendeter Confirms: "+ sharedClientData.confirmCounter.get());
+			//log.debug("Durchschnittliche Serverbearbeitungszeit in ns: "+ sharedStatistics.getAverageServerTime() + ", = "+ sharedStatistics.getAverageServerTime() / 1000000 + " ms");
 
 			// Nachbearbeitung fuer die Statistik
 			postLogout();
@@ -328,9 +322,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 
 		if (rtt <= serverTime) {
 			// Test, ob Messung plausibel ist, rtt muss groesser als serverTime sein
-			//log.error(threadName + ": RTT fuer Request " + (messageNumber + 1) + ": " + rtt
-					+ " ns = " + (rtt / 1000000) + " ms,  benoetigte Serverzeit: " + serverTime
-					+ " ns = " + (serverTime / 1000000) + " ms");
+			//log.error(threadName + ": RTT fuer Request " + (messageNumber + 1) + ": " + rtt+ " ns = " + (rtt / 1000000) + " ms,  benoetigte Serverzeit: " + serverTime+ " ns = " + (serverTime / 1000000) + " ms");
 		}
 	}
 
@@ -350,11 +342,9 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				getNumberOfLostConfirms());
 		sharedStatistics.setNumberOfRetriedEvents(clientNumber, getNumberOfRetries());
 
-		//log.debug(
-				"Vom Server verarbeitete Chat-Nachrichten: " + getNumberOfReceivedChatMessages());
+		//log.debug("Vom Server verarbeitete Chat-Nachrichten: " + getNumberOfReceivedChatMessages());
 		//log.debug("Vom Server gesendete Event-Nachrichten: " + getNumberOfSentEvents());
-		//log.debug("Dem Server bestaetigte Event-Nachrichten (Confirms): "
-				+ getNumberOfReceivedConfirms());
+		//log.debug("Dem Server bestaetigte Event-Nachrichten (Confirms): "+ getNumberOfReceivedConfirms());
 		//log.debug("Im Server nicht empfangene Bestaetigungen: " + getNumberOfLostConfirms());
 		//log.debug("Vom Server initiierte Wiederholungen: " + getNumberOfRetries());
 	}
@@ -406,8 +396,7 @@ public class BenchmarkingClientImpl extends AbstractChatClient
 				return false;
 			}
 		} else {
-			//log.error(
-					Thread.currentThread().getName() + " muss nicht auf notify warten, Lock frei");
+			//log.error(Thread.currentThread().getName() + " muss nicht auf notify warten, Lock frei");
 			return false;
 		}
 	}

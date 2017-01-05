@@ -184,9 +184,7 @@ public class BenchmarkingClientCoordinator extends Thread
 
 		clientGui.testFinished();
 
-		//log.debug(
-				"Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Uebertragungswiederholungen): "
-						+ sharedData.getSumOfAllRetries());
+		//log.debug("Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Uebertragungswiederholungen): " + sharedData.getSumOfAllRetries());
 
 		// Datensatz fuer Benchmark-Lauf auf Protokolldatei schreiben
 		sharedData.writeStatisticSet("Benchmarking-ChatApp-Protokolldatei",
