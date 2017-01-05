@@ -74,7 +74,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 			ExceptionHandler.logException(e);
 		}
 
-		log.debug("Verbindung zum Server steht");
+		//log.debug("Verbindung zum Server steht");
 
 		/*
 		 * Gemeinsame Datenstruktur aufbauen
@@ -113,7 +113,7 @@ public abstract class AbstractChatClient implements ClientCommunication {
 		requestPdu.setUserName(userName);
 		try {
 			connection.send(requestPdu);
-			log.debug("Login-Request-PDU fuer Client " + userName + " an Server gesendet");
+			//log.debug("Login-Request-PDU fuer Client " + userName + " an Server gesendet");
 		} catch (Exception e) {
 			throw new IOException();
 		}
@@ -131,11 +131,11 @@ public abstract class AbstractChatClient implements ClientCommunication {
 		try {
 			connection.send(requestPdu);
 			sharedClientData.logoutCounter.getAndIncrement();
-			log.debug("Logout-Request von " + requestPdu.getUserName()
+			//log.debug("Logout-Request von " + requestPdu.getUserName()
 					+ " gesendet, LogoutCount = " + sharedClientData.logoutCounter.get());
 
 		} catch (Exception e) {
-			log.debug("Senden der Logout-Nachricht nicht moeglich");
+			//log.debug("Senden der Logout-Nachricht nicht moeglich");
 			throw new IOException();
 		}
 	}
@@ -153,12 +153,12 @@ public abstract class AbstractChatClient implements ClientCommunication {
 		requestPdu.setSequenceNumber(sharedClientData.messageCounter.get());
 		try {
 			connection.send(requestPdu);
-			log.debug("Chat-Message-Request-PDU fuer Client " + name
+			//log.debug("Chat-Message-Request-PDU fuer Client " + name
 					+ " an Server gesendet, Inhalt: " + text);
-			log.debug("MessageCounter: " + sharedClientData.messageCounter.get()
+			//log.debug("MessageCounter: " + sharedClientData.messageCounter.get()
 					+ ", SequenceNumber: " + requestPdu.getSequenceNumber());
 		} catch (Exception e) {
-			log.debug("Senden der Chat-Nachricht nicht moeglich");
+			//log.debug("Senden der Chat-Nachricht nicht moeglich");
 			throw new IOException();
 		}
 	}

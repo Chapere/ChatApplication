@@ -71,7 +71,7 @@ public class LoggedInGuiController {
 		try {
 			appController.getCommunicator().logout(appController.getModel().getUserName());
 		} catch (IOException e) {
-			log.error("Logout konnte nicht durchgefuehrt werden, Server aktiv?");
+			//log.error("Logout konnte nicht durchgefuehrt werden, Server aktiv?");
 			appController.setErrorMessage("Chat-Client",
 					"Abmelden beim Server nicht erfolgreich, vermutlich ist der Server nicht aktiv",
 					5);
@@ -90,7 +90,7 @@ public class LoggedInGuiController {
 					txtChatMessage.getText());
 		} catch (IOException e) {
 			// Senden funktioniert nicht, Server vermutlich nicht aktiv
-			log.error("Senden konnte nicht durchgefuehrt werden, Server aktiv?");
+			//log.error("Senden konnte nicht durchgefuehrt werden, Server aktiv?");
 			appController.setErrorMessage("Chat-Client",
 					"Die Nachricht konnte nicht gesendet werden, vermutlich ist der Server nicht aktiv",
 					6);

@@ -121,7 +121,7 @@ public class SharedClientStatistics {
 	 */
 	private boolean inRange(int i) {
 		if ((i < 0) || (i > numberOfClients)) {
-			log.error("Client-Id nicht im gueltigen Bereich");
+			//log.error("Client-Id nicht im gueltigen Bereich");
 			return false;
 		} else {
 			return true;
@@ -178,7 +178,7 @@ public class SharedClientStatistics {
 		clientGui.countUpProgressTask();
 
 		if (numberOfLoggedInClients == numberOfClients) {
-			log.debug("Alle " + numberOfClients + " Test-Clients angemeldet");
+			//log.debug("Alle " + numberOfClients + " Test-Clients angemeldet");
 		}
 	}
 
@@ -190,7 +190,7 @@ public class SharedClientStatistics {
 		numberOfLoggedOutClients++;
 		clientGui.countUpProgressTask();
 		if (numberOfLoggedOutClients == numberOfClients) {
-			log.debug("Alle " + numberOfClients + " Test-Clients abgemeldet");
+			//log.debug("Alle " + numberOfClients + " Test-Clients abgemeldet");
 		}
 	}
 
@@ -718,7 +718,7 @@ public class SharedClientStatistics {
 			distributionMetrics.setStandardDeviation(standardDeviation.evaluate() / 1000000.0);
 
 		} catch (MathIllegalArgumentException e) {
-			log.error("Fehler bei der Berechnung der Verteilungsmetriken");
+			//log.error("Fehler bei der Berechnung der Verteilungsmetriken");
 		}
 
 		return distributionMetrics;
@@ -960,9 +960,9 @@ public class SharedClientStatistics {
 		try {
 			boolean exist = file.createNewFile();
 			if (!exist) {
-				log.debug("Datei " + fileName + " existierte bereits");
+				//log.debug("Datei " + fileName + " existierte bereits");
 			} else {
-				log.debug("Datei " + fileName + " erfolgreich angelegt");
+				//log.debug("Datei " + fileName + " erfolgreich angelegt");
 			}
 
 			// Datei zum Erweitern oeffnen
@@ -998,7 +998,7 @@ public class SharedClientStatistics {
 			out.close();
 
 		} catch (IOException e) {
-			log.error("Fehler beim Schreiben des Auswertungssatzes in Datei " + fileName);
+			//log.error("Fehler beim Schreiben des Auswertungssatzes in Datei " + fileName);
 		}
 	}
 

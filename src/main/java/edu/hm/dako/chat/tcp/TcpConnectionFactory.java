@@ -56,11 +56,11 @@ public class TcpConnectionFactory implements ConnectionFactory {
 			} catch (BindException e) {
 
 				// Lokaler Port schon verwendet
-				log.error("BindException beim Verbindungsaufbau: " + e.getMessage());
+				//log.error("BindException beim Verbindungsaufbau: " + e.getMessage());
 
 			} catch (IOException e) {
 
-				log.error("IOException beim Verbindungsaufbau: " + e.getMessage());
+				//log.error("IOException beim Verbindungsaufbau: " + e.getMessage());
 
 				// Ein wenig warten und erneut versuchen
 				attempts++;
@@ -70,15 +70,14 @@ public class TcpConnectionFactory implements ConnectionFactory {
 				}
 
 			} catch (Exception e) {
-				log.error("Sonstige Exception beim Verbindungsaufbau " + e.getMessage());
+				//log.error("Sonstige Exception beim Verbindungsaufbau " + e.getMessage());
 			}
 			if (attempts >= MAX_CONNECTION_ATTEMPTS) {
 				throw new IOException();
 			}
 		}
 
-		log.debug("Anzahl der Verbindungsaufbauversuche fuer die Verbindung zum Server: "
-				+ connectionTryCounter);
+		//log.debug("Anzahl der Verbindungsaufbauversuche fuer die Verbindung zum Server: " + connectionTryCounter);
 		return connection;
 	}
 }

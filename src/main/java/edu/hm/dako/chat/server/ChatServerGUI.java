@@ -367,7 +367,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 				try {
 					chatServer.stop();
 				} catch (Exception e) {
-					log.error("Fehler beim Stoppen des Chat-Servers");
+					//log.error("Fehler beim Stoppen des Chat-Servers");
 					ExceptionHandler.logException(e);
 				}
 
@@ -396,7 +396,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			@Override
 			public void handle(ActionEvent event) {
 				System.out.println("ChatServer-GUI ordnungsgemaess beendet");
-				log.debug("Schliessen-Button betaetigt");
+				//log.debug("Schliessen-Button betaetigt");
 				System.exit(0);
 			}
 		});
@@ -439,7 +439,7 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			chatServer = ServerFactory.getServer(serverImpl, serverPort, sendBufferSize,
 					receiveBufferSize, this);
 		} catch (Exception e) {
-			log.error("Fehler beim Starten des Chat-Servers: " + e.getMessage());
+			//log.error("Fehler beim Starten des Chat-Servers: " + e.getMessage());
 			ExceptionHandler.logException(e);
 			throw new Exception(e);
 		}
@@ -540,9 +540,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			@Override
 			public void run() {
 
-				log.debug("runLater: run-Methode wird ausgefuehrt");
-				log.debug("runLater: Logged in Clients: "
-						+ String.valueOf(loggedInClientCounter.get()));
+				//log.debug("runLater: run-Methode wird ausgefuehrt");
+				//log.debug("runLater: Logged in Clients: "+ String.valueOf(loggedInClientCounter.get()));
 
 				loggedInClients.setText(String.valueOf(loggedInClientCounter.get()));
 			}
@@ -560,8 +559,8 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 			@Override
 			public void run() {
 
-				log.debug("runLater: run-Methode wird ausgefuehrt");
-				log.debug("runLater: Received Requests: " + String.valueOf(requestCounter.get()));
+				//log.debug("runLater: run-Methode wird ausgefuehrt");
+				//log.debug("runLater: Received Requests: " + String.valueOf(requestCounter.get()));
 
 				receivedRequests.setText(String.valueOf(requestCounter.get()));
 			}
@@ -597,21 +596,21 @@ public class ChatServerGUI extends Application implements ChatServerGuiInterface
 	public void incrNumberOfLoggedInClients() {
 
 		loggedInClientCounter.getAndIncrement();
-		log.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
+		//log.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
 		updateLoggedInClients();
 	}
 
 	@Override
 	public void decrNumberOfLoggedInClients() {
 		loggedInClientCounter.getAndDecrement();
-		log.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
+		//log.debug("Eingeloggte Clients: " + loggedInClientCounter.get());
 		updateLoggedInClients();
 	}
 
 	@Override
 	public void incrNumberOfRequests() {
 		requestCounter.getAndIncrement();
-		log.debug(requestCounter.get() + " emfangene Message Requests");
+		//log.debug(requestCounter.get() + " emfangene Message Requests");
 		updateNumberOfRequests();
 	}
 }

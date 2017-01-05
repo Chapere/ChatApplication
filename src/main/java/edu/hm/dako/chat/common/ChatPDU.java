@@ -172,7 +172,7 @@ public class ChatPDU implements Serializable {
 
   public static void printPdu(ChatPDU pdu) {
     // System.out.println(pdu);
-    log.debug(pdu);
+    //log.debug(pdu);
   }
 
   public void setClients(Vector<String> clients) {

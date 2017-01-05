@@ -23,20 +23,20 @@ public class ExceptionHandler {
 		try {
 			throw exception;
 		} catch (java.io.EOFException e) {
-			log.error("End of File bei Verbindung: " + e);
+			//log.error("End of File bei Verbindung: " + e);
 		} catch (SocketException e) {
-			log.error("Exception bei der Socket-Nutzung: " + e);
+			//log.error("Exception bei der Socket-Nutzung: " + e);
 		} catch (UnknownHostException e) {
-			log.error("Exception bei Adressebelegung: " + e);
+			//log.error("Exception bei Adressebelegung: " + e);
 		} catch (IOException e) {
-			log.debug("Senden oder Empfangen von Nachrichten nicht moeglich: " + e);
+			//log.debug("Senden oder Empfangen von Nachrichten nicht moeglich: " + e);
 		} catch (InterruptedException e) {
-			log.error("Sleep unterbrochen");
+			//log.error("Sleep unterbrochen");
 		} catch (ClassNotFoundException e) {
-			log.error("Empfangene Objektklasse nicht bekannt:" + e);
+			//log.error("Empfangene Objektklasse nicht bekannt:" + e);
 		} catch (Exception e) {
 			// exception.printStackTrace();
-			log.error("Schwerwiegender Fehler");
+			//log.error("Schwerwiegender Fehler");
 		}
 		if (terminateVm) {
 			System.exit(1);

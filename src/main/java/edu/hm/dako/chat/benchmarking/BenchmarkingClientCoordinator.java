@@ -147,7 +147,7 @@ public class BenchmarkingClientCoordinator extends Thread
 				+ (parm.getNumberOfClients() * parm.getNumberOfClients())
 				+ (parm.getNumberOfClients() * parm.getNumberOfClients());
 
-		log.debug("Anzahl geplanter Event-Nachrichten: " + numberOfPlannedEventMessages);
+		//log.debug("Anzahl geplanter Event-Nachrichten: " + numberOfPlannedEventMessages);
 		startData.setNumberOfPlannedEventMessages(numberOfPlannedEventMessages);
 
 		clientGui.showStartData(startData);
@@ -161,7 +161,7 @@ public class BenchmarkingClientCoordinator extends Thread
 		try {
 			executorService.awaitTermination(10000, TimeUnit.MINUTES);
 		} catch (InterruptedException e) {
-			log.error("Das Beenden des ExecutorService wurde unterbrochen");
+			//log.error("Das Beenden des ExecutorService wurde unterbrochen");
 			e.printStackTrace();
 		}
 
@@ -184,7 +184,7 @@ public class BenchmarkingClientCoordinator extends Thread
 
 		clientGui.testFinished();
 
-		log.debug(
+		//log.debug(
 				"Anzahl aller erneuten Sendungen wegen Nachrichtenverlust (Uebertragungswiederholungen): "
 						+ sharedData.getSumOfAllRetries());
 

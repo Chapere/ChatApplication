@@ -39,7 +39,7 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 	 */
 	public SimpleChatServerImpl(ExecutorService executorService,
 			ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
-		log.debug("SimpleChatServerImpl konstruiert");
+		//log.debug("SimpleChatServerImpl konstruiert");
 		this.executorService = executorService;
 		this.socket = socket;
 		this.serverGuiInterface = serverGuiInterface;
@@ -64,17 +64,16 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 								"SimpleChatServer wartet auf Verbindungsanfragen von Clients...");
 
 						Connection connection = socket.accept();
-						log.debug("Neuer Verbindungsaufbauwunsch empfangen");
+						//log.debug("Neuer Verbindungsaufbauwunsch empfangen");
 
 						// Neuen Workerthread starten
 						executorService.submit(new SimpleChatWorkerThreadImpl(connection, clients,
 								counter, serverGuiInterface));
 					} catch (Exception e) {
 						if (socket.isClosed()) {
-							log.debug("Socket wurde geschlossen");
+							//log.debug("Socket wurde geschlossen");
 						} else {
-							log.error(
-									"Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
+							//log.error("Exception beim Entgegennehmen von Verbindungsaufbauwuenschen: " + e);
 							ExceptionHandler.logException(e);
 						}
 					}
@@ -99,11 +98,10 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 			try {
 				if (client != null) {
 					client.getConnection().close();
-					log.error("Verbindung zu Client " + client.getUserName() + " geschlossen");
+					//log.error("Verbindung zu Client " + client.getUserName() + " geschlossen");
 				}
 			} catch (Exception e) {
-				log.debug(
-						"Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
+				//log.debug("Fehler beim Schliessen der Verbindung zu Client " + client.getUserName());
 				ExceptionHandler.logException(e);
 			}
 		}
@@ -112,9 +110,9 @@ public class SimpleChatServerImpl extends AbstractChatServer {
 		clients.deleteAll();
 		Thread.currentThread().interrupt();
 		socket.close();
-		log.debug("Listen-Socket geschlossen");
+		//log.debug("Listen-Socket geschlossen");
 		executorService.shutdown();
-		log.debug("Threadpool freigegeben");
+		//log.debug("Threadpool freigegeben");
 
 		System.out.println("SimpleChatServer beendet sich");
 	}
