@@ -25,11 +25,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
     @Override
     protected void loginResponseAction(ChatPDU receivedPdu) {
-
         if (receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
 
             // Login hat nicht funktioniert
             //log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()+ " mit Login-Error empfangen");
+
             userInterface.setErrorMessage(
                     "Chat-Server", "Anmelden beim Server nicht erfolgreich, Benutzer "
                             + receivedPdu.getUserName() + " vermutlich schon angemeldet",
@@ -66,11 +66,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         }
 
         //Login Confirm PDU erzeugen und an den Server geben
-        ChatPDU confirmPdu = ChatPDU.createLoginEventConfirm(receivedPdu.getEventUserName(), receivedPdu);
+        ChatPDU confirmPdu = ChatPDU.createLoginEventConfirm(sharedClientData.userName, receivedPdu);
         try {
             connection.send(confirmPdu);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(e);
         }
     }
 
@@ -91,7 +91,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
 
     @Override
     protected void logoutEventAction(ChatPDU receivedPdu) {
-
         // Eventzaehler fuer Testzwecke erhoehen
         sharedClientData.eventCounter.getAndIncrement();
 
@@ -102,11 +101,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         }
 
         //Logout Confirm erzeugen und an Server geben
-        ChatPDU confirmPdu = ChatPDU.createLogoutEventConfirm(receivedPdu.getEventUserName(), receivedPdu);
+        ChatPDU confirmPdu = ChatPDU.createLogoutEventConfirm(sharedClientData.userName, receivedPdu);
         try {
             connection.send(confirmPdu);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(e);
         }
 
     }
@@ -148,11 +147,11 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
                 (String) receivedPdu.getMessage());
 
         //Sende Confirm an Server zurück
-        ChatPDU confirmPdu=ChatPDU.createChatMessageEventConfirm(receivedPdu.getEventUserName(), receivedPdu);
+        ChatPDU confirmPdu=ChatPDU.createChatMessageEventConfirm(sharedClientData.userName, receivedPdu);
         try {
            connection.send(confirmPdu);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionHandler.logException(e);
         }
     }
 

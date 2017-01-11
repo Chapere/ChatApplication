@@ -10,7 +10,6 @@ import org.apache.commons.logging.LogFactory;
  * <p/>
  * Nachrichtenaufbau fuer Chat-Protokoll (fuer alle Nachrichtentypen: Request, Response,
  * Event, Confirm)
- *
  * @author Mandl
  */
 public class ChatPDU implements Serializable {

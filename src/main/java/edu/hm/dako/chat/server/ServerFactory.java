@@ -13,10 +13,11 @@ import edu.hm.dako.chat.tcp.TcpServerSocket;
 
 /**
  * Uebernimmt die Konfiguration und Erzeugung bestimmter Server-Typen. Siehe
- * {@link edu.hm.dako.chat.benchmarking.echo.benchmarking.UserInterfaceInputParameters.ImplementationType}
+ *
  * 
  * @author Peter Mandl
  */
+//{@link edu.hm.dako.chat.benchmarking.echo.benchmarking.UserInterfaceInputParameters.ImplementationType}
 public final class ServerFactory {
 	private static Log log = LogFactory.getLog(ServerFactory.class);
 
@@ -60,12 +61,12 @@ public final class ServerFactory {
 				throw new Exception(e);
 			}
 
-			case TCPAdvancedImplementation:
+		case TCPAdvancedImplementation:
 
 			try {
 				TcpServerSocket tcpServerSocket = new TcpServerSocket(serverPort, sendBufferSize,
 						receiveBufferSize);
-				return new SimpleChatServerImpl(Executors.newCachedThreadPool(),
+				return new AdvancedChatServerImpl(Executors.newCachedThreadPool(),
 						getDecoratedServerSocket(tcpServerSocket), serverGuiInterface);
 			} catch (Exception e) {
 				throw new Exception(e);
