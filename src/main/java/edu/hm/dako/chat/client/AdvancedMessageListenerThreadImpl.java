@@ -10,26 +10,36 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * Thread wartet auf ankommende Nachrichten vom Server und bearbeitet diese.
- *
- * @author Peter Mandl
- *
+ * @author NONAME
  */
 public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerThread {
 
+    /**
+     * the log data which contains the automatic carried protocoll
+     */
     private static Log log = LogFactory.getLog(AdvancedMessageListenerThreadImpl.class);
 
+    /**
+     * super class Member
+     * @param userInterface the interface for a user
+     * @param con Connection
+     * @param sharedData sharedData
+     */
     public AdvancedMessageListenerThreadImpl(ClientUserInterface userInterface,
                                            Connection con, SharedClientData sharedData) {
         super(userInterface, con, sharedData);
     }
 
+    /**
+     * Response to a login Request
+     * @param receivedPdu The PDU the eventinitiator sends
+     */
     @Override
     protected void loginResponseAction(ChatPDU receivedPdu) {
         if (receivedPdu.getErrorCode() == ChatPDU.LOGIN_ERROR) {
 
             // Login hat nicht funktioniert
             //log.error("Login-Response-PDU fuer Client " + receivedPdu.getUserName()+ " mit Login-Error empfangen");
-
             userInterface.setErrorMessage(
                     "Chat-Server", "Anmelden beim Server nicht erfolgreich, Benutzer "
                             + receivedPdu.getUserName() + " vermutlich schon angemeldet",
@@ -53,6 +63,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         }
     }
 
+    /**
+     * creating a confirm for a loginResponse
+     * @param receivedPdu pdu the initiator sends
+     */
     @Override
     protected void loginEventAction(ChatPDU receivedPdu) {
 
@@ -74,6 +88,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         }
     }
 
+    /**
+     * response to a logout request
+     * @param receivedPdu pdu the initiator sends
+     */
     @Override
     protected void logoutResponseAction(ChatPDU receivedPdu) {
 
@@ -89,6 +107,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         userInterface.logoutComplete();
     }
 
+    /**
+     * creating a confirm for a logout request
+     * @param receivedPdu pdu the initiator sends
+     */
     @Override
     protected void logoutEventAction(ChatPDU receivedPdu) {
         // Eventzaehler fuer Testzwecke erhoehen
@@ -107,9 +129,12 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         } catch (Exception e) {
             ExceptionHandler.logException(e);
         }
-
     }
 
+    /**
+     * response to a chatmessage request
+     * @param receivedPdu pdu the initiator sends
+     */
     @Override
     protected void chatMessageResponseAction(ChatPDU receivedPdu) {
 
@@ -133,6 +158,10 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         }
     }
 
+    /**
+     * creating a confirm for a chatmessage request
+     * @param receivedPdu pdu the initiator sends
+     */
     @Override
     protected void chatMessageEventAction(ChatPDU receivedPdu) {
 
@@ -155,6 +184,7 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
         }
     }
 
+    // run
     /**
      * Bearbeitung aller vom Server ankommenden Nachrichten
      */
@@ -300,6 +330,6 @@ public class AdvancedMessageListenerThreadImpl extends AbstractMessageListenerTh
             ExceptionHandler.logException(e);
         }
         //log.debug("Ordnungsgemaesses Ende des AdvancedMessageListener-Threads fuer User"+ sharedClientData.userName + ", Status: " + sharedClientData.status);
-    } // run
+    }
 
 }

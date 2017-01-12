@@ -1,14 +1,5 @@
 package edu.hm.dako.chat.server;
 
-/**
- * <p/>
- * Advanced-Chat-Server-Implementierung Der ChatServer wird in einem eigenen
- * Thread gestartet. Er nimmt alle Verbindungsaufbauwuensche der ChatClients
- * entgegen und startet fuer jede Verbindung jeweils einen eigenen Worker-Thread
- *
- * @author
- */
-
 import edu.hm.dako.chat.common.ClientListEntry;
 import edu.hm.dako.chat.common.ExceptionHandler;
 import edu.hm.dako.chat.connection.Connection;
@@ -21,24 +12,34 @@ import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+/**
+ * Advanced-Chat-Server-Implementierung Der ChatServer wird in einem eigenen
+ * Thread gestartet. Er nimmt alle Verbindungsaufbauwuensche der ChatClients
+ * entgegen und startet fuer jede Verbindung jeweils einen eigenen Worker-Thread
+ * @author NONAME
+ */
 public class AdvancedChatServerImpl extends AbstractChatServer {
 
+    /**
+     * the log data contains the info about the protocoll for debug purpose
+     */
     private static Log log = LogFactory.getLog(AdvancedChatServerImpl.class);
 
-    // Threadpool fuer Worker-Threads
+    /**
+     * Threadpool fuer Worker-Threads
+     */
     private final ExecutorService executorService;
 
-    // Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients
-    // entgegennimmt
+    /**
+     * Socket fuer den Listener, der alle Verbindungsaufbauwuensche der Clients entgegennimmt
+     */
     private ServerSocketInterface socket;
 
     /**
-     * Konstruktor
-     *
-     * @param executorService
-     * @param socket
-     * @param serverGuiInterface
+     * contains important infos about the whole server infrastructure
+     * @param executorService threadpool for worker threads
+     * @param socket socket for listener
+     * @param serverGuiInterface The GUI for the server
      */
     public AdvancedChatServerImpl(ExecutorService executorService,
                                 ServerSocketInterface socket, ChatServerGuiInterface serverGuiInterface) {
@@ -53,6 +54,9 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
 
     }
 
+    /**
+     * The method starts the server
+     */
     @Override
     public void start() {
         Task<Void> task = new Task<Void>() {
@@ -92,6 +96,9 @@ public class AdvancedChatServerImpl extends AbstractChatServer {
 
     }
 
+    /**
+     *  the method shuts the server down
+     */
     @Override
     public void stop() throws Exception {
 

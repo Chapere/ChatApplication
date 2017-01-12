@@ -31,7 +31,7 @@ public class TcpConnection implements Connection {
 	// Verwendetes TCP-Socket
 	private Socket socket;
 
-	/*
+	/**
 	 * Zur Information: Standardgroesse des Empfangspuffers einer TCP-Verbindung:
 	 * 8192 Byte. Standardgroesse des Sendepuffers einer TCP-Verbindung: 8192
 	 * Byte.
